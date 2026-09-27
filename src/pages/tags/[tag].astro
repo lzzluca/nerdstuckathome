@@ -1,0 +1,67 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const tags = [...new Set(posts.flatMap((p) => p.data.tags))];
+  return tags.map((tag) => ({
+    params: { tag },
+    props: {
+      posts: posts
+        .filter((p) => p.data.tags.includes(tag))
+        .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
+      allTags: tags,
+    },
+  }));
+}
+
+const { tag } = Astro.params;
+const { posts, allTags } = Astro.props;
+
+const dateFmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+---
+<BaseLayout title={`#${tag} — nerdstuckathome`}>
+  <div class="body-grid">
+    <main>
+      <h1>#{tag}</h1>
+      {posts.map((post) => (
+        <article class="post-row">
+          <div class="date">{dateFmt(post.data.date)}</div>
+          <h2><a href={`/posts/${post.id}`}>{post.data.title}</a></h2>
+          <p class="excerpt">{post.data.excerpt}</p>
+        </article>
+      ))}
+    </main>
+    <Sidebar tags={allTags} activeTag={tag} />
+  </div>
+</BaseLayout>
+
+<style>
+  .body-grid {
+    flex-grow: 1;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 56px 64px;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 40px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  main { grid-column: span 8; display: flex; flex-direction: column; gap: 28px; }
+  h1 { font-size: 34px; margin-bottom: 8px; }
+  .post-row { display: flex; flex-direction: column; gap: 8px; padding-bottom: 24px; border-bottom: 1px solid var(--border-soft); }
+  .post-row .date { font-size: 13px; color: var(--ink-faint); }
+  .post-row h2 { font-size: 22px; }
+  .post-row h2 a { color: var(--ink); }
+  .post-row h2 a:hover { text-decoration: none; }
+  .excerpt { margin: 0; font-size: 15px; color: var(--ink-muted); }
+
+  @media (max-width: 900px) {
+    .body-grid { grid-template-columns: 1fr; padding: 32px 20px; }
+    main { grid-column: 1; }
+  }
+</style>

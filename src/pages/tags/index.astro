@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const posts = await getCollection('blog', ({ data }) => !data.draft);
+const tagCounts = new Map<string, number>();
+for (const post of posts) {
+  for (const tag of post.data.tags) {
+    tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+  }
+}
+const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
+---
+<BaseLayout title="Tags — nerdstuckathome">
+  <div class="tags-page">
+    <h1>Browse by tag</h1>
+    <div class="pills">
+      {tags.map(([tag, count]) => (
+        <a href={`/tags/${tag}`} class="pill">{tag} <span class="count">{count}</span></a>
+      ))}
+      {tags.length === 0 && <p class="empty">No tags yet.</p>}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .tags-page {
+    flex-grow: 1;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 56px 64px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 34px; margin-bottom: 24px; }
+  .pills { display: flex; flex-wrap: wrap; gap: 10px; }
+  .pill {
+    font-size: 14px; font-weight: 600;
+    padding: 7px 16px;
+    border-radius: 999px;
+    background: var(--pill-bg);
+    color: var(--ink-muted);
+  }
+  .pill:hover { text-decoration: none; background: var(--border); }
+  .count { color: var(--ink-fainter); font-weight: 400; }
+  .empty { color: var(--ink-faint); }
+
+  @media (max-width: 720px) {
+    .tags-page { padding: 32px 20px; }
+  }
+</style>

@@ -1,0 +1,103 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Sidebar from '../components/Sidebar.astro';
+
+const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const [featured, ...rest] = allPosts;
+const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))];
+
+const dateFmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+---
+<BaseLayout title="nerdstuckathome — posts">
+  <div class="body-grid">
+    <main>
+      {featured && (
+        <article class="featured">
+          <div class="meta">
+            <span class="eyebrow">Featured</span>
+            <span class="dot">·</span>
+            <span class="date">{dateFmt(featured.data.date)}</span>
+          </div>
+          <h1><a href={`/posts/${featured.id}`}>{featured.data.title}</a></h1>
+          <p class="excerpt">{featured.data.excerpt}</p>
+          <div class="tags">
+            {featured.data.tags.map((tag) => <span class="tag-pill">{tag}</span>)}
+          </div>
+        </article>
+      )}
+
+      {rest.map((post) => (
+        <article class="post-row">
+          <div class="date">{dateFmt(post.data.date)}</div>
+          <h2><a href={`/posts/${post.id}`}>{post.data.title}</a></h2>
+          <p class="excerpt">{post.data.excerpt}</p>
+          <div class="tags">
+            {post.data.tags.map((tag) => <span class="tag-pill">{tag}</span>)}
+          </div>
+        </article>
+      ))}
+
+      {allPosts.length === 0 && (
+        <p class="empty">No posts yet — drop a markdown file in <code>src/content/blog/</code> to get started.</p>
+      )}
+    </main>
+
+    <Sidebar tags={allTags} />
+  </div>
+</BaseLayout>
+
+<style>
+  .body-grid {
+    flex-grow: 1;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 56px 64px;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 40px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  main { grid-column: span 8; display: flex; flex-direction: column; gap: 44px; }
+
+  .featured {
+    display: flex; flex-direction: column; gap: 14px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid var(--border);
+  }
+  .featured .meta {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px; font-weight: 600; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .featured .dot { color: #c9c2b3; }
+  .featured .date { color: var(--ink-faint); text-transform: none; letter-spacing: normal; }
+  .featured h1 { font-size: 40px; line-height: 1.15; }
+  .featured h1 a { color: var(--ink); }
+  .featured h1 a:hover { text-decoration: none; }
+  .excerpt { margin: 0; font-size: 17px; line-height: 1.6; color: var(--ink-muted); max-width: 640px; }
+  .tags { display: flex; gap: 8px; margin-top: 4px; }
+
+  .post-row {
+    display: flex; flex-direction: column; gap: 10px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .post-row .date { font-size: 13px; color: var(--ink-faint); }
+  .post-row h2 { font-size: 24px; line-height: 1.25; }
+  .post-row h2 a { color: var(--ink); }
+  .post-row h2 a:hover { text-decoration: none; }
+  .post-row .excerpt { font-size: 15.5px; max-width: 620px; }
+  .post-row .tag-pill { background: var(--pill-bg-soft); }
+
+  .empty { color: var(--ink-faint); font-size: 15px; }
+
+  @media (max-width: 900px) {
+    .body-grid { grid-template-columns: 1fr; padding: 32px 20px; gap: 32px; }
+    main { grid-column: 1; }
+  }
+</style>

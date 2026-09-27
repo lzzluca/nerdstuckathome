@@ -1,0 +1,31 @@
+---
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <span>© {year} nerdstuckathome</span>
+  <div class="links">
+    <a href="/">Posts</a>
+    <a href="/rss.xml">RSS</a>
+    <a href="https://github.com/lzzluca" target="_blank" rel="noopener">Source</a>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 24px 64px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--ink-fainter);
+  }
+  .links { display: flex; gap: 20px; }
+  .links a { color: var(--ink-fainter); }
+
+  @media (max-width: 720px) {
+    .site-footer { padding: 20px; flex-direction: column; gap: 10px; text-align: center; }
+  }
+</style>

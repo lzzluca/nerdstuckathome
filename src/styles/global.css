@@ -1,0 +1,87 @@
+:root {
+  --bg: #f7f5f0;
+  --bg-panel: #fbfaf7;
+  --ink: #1c1a16;
+  --ink-muted: #4a453b;
+  --ink-faint: #6b6558;
+  --ink-fainter: #8a8474;
+  --border: #e3ddd0;
+  --border-soft: #ece8df;
+  --accent: #b3542c;
+  --accent-hover: #8a3f1f;
+  --pill-bg: #ece8df;
+  --pill-bg-soft: #f1eee6;
+  --badge-bg: #eef0ea;
+  --badge-border: #dbe0d3;
+  --badge-ink: #3f5a37;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Source Sans Pro', ui-sans-serif, system-ui, sans-serif;
+}
+
+h1, h2, h3 {
+  font-family: 'Fraunces', Georgia, serif;
+  margin: 0;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+code {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  background: var(--pill-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
+.tag-pill {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--pill-bg);
+  color: var(--ink-muted);
+}
+
+/* prose styling for post bodies */
+.prose {
+  max-width: 680px;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--ink-muted);
+}
+.prose h2 { font-size: 26px; margin-top: 2em; color: var(--ink); }
+.prose h3 { font-size: 20px; margin-top: 1.6em; color: var(--ink); }
+.prose p { margin: 1em 0; }
+.prose a { text-decoration: underline; }
+.prose pre {
+  background: #1c1a16;
+  color: #f7f5f0;
+  padding: 20px;
+  border-radius: 12px;
+  overflow-x: auto;
+  font-size: 14px;
+}
+.prose pre code { background: none; padding: 0; }
+.prose blockquote {
+  border-left: 3px solid var(--accent);
+  margin: 1.5em 0;
+  padding-left: 1.2em;
+  color: var(--ink-faint);
+  font-style: italic;
+}
+.prose ul, .prose ol { padding-left: 1.4em; }

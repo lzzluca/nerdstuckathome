@@ -1,0 +1,57 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { id: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const dateFmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+---
+<BaseLayout title={`${post.data.title} — nerdstuckathome`} description={post.data.excerpt}>
+  <div class="post-page">
+    <a href="/" class="back">&larr; All posts</a>
+    <article>
+      <div class="meta">
+        <span class="date">{dateFmt(post.data.date)}</span>
+      </div>
+      <h1>{post.data.title}</h1>
+      <div class="tags">
+        {post.data.tags.map((tag) => <span class="tag-pill">{tag}</span>)}
+      </div>
+      <div class="prose">
+        <Content />
+      </div>
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  .post-page {
+    flex-grow: 1;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 48px 64px 80px;
+    max-width: 780px;
+    margin: 0 auto;
+  }
+  .back { font-size: 14px; font-weight: 600; color: var(--ink-faint); }
+  .back:hover { color: var(--accent); text-decoration: none; }
+  article { margin-top: 24px; }
+  .meta { font-size: 13px; color: var(--ink-faint); margin-bottom: 12px; }
+  h1 { font-size: 40px; line-height: 1.15; margin-bottom: 16px; }
+  .tags { display: flex; gap: 8px; margin-bottom: 8px; }
+
+  @media (max-width: 720px) {
+    .post-page { padding: 32px 20px 60px; }
+    h1 { font-size: 30px; }
+  }
+</style>

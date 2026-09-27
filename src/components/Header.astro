@@ -1,0 +1,64 @@
+---
+---
+<header class="site-header">
+  <div class="brand">
+    <div class="mark"><span>&gt;_</span></div>
+    <span class="wordmark">nerdstuckathome</span>
+  </div>
+  <nav>
+    <a href="/" class="nav-active">Posts</a>
+    <a href="/tags">Tags</a>
+    <a href="/about">About</a>
+    <a href="/rss.xml" class="rss">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      RSS
+    </a>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-panel);
+  }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .mark {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .mark span {
+    color: var(--bg);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .wordmark {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  nav a { color: var(--ink-faint); }
+  nav a.nav-active { color: var(--ink); }
+  nav a:hover { text-decoration: none; color: var(--accent); }
+  nav a.rss { display: flex; align-items: center; gap: 6px; }
+
+  @media (max-width: 720px) {
+    .site-header { padding: 16px 20px; flex-wrap: wrap; gap: 12px; }
+    nav { gap: 18px; font-size: 14px; }
+  }
+</style>

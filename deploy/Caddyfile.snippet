@@ -1,0 +1,21 @@
+# --- Add this block to /etc/caddy/Caddyfile on the VPS ---
+# It serves the static build directly; no reverse proxy or Node process needed.
+# If other services get their own site block on this same
+# Caddyfile later, they just sit alongside this one — no changes needed here.
+
+nerdstuckathome.com, www.nerdstuckathome.com {
+    root * /var/www/nerdstuckathome
+    file_server
+    encode gzip zstd
+
+    # Astro's static build already emits clean URLs (no .html needed),
+    # but this makes 404s land on your own page instead of Caddy's default.
+    handle_errors {
+        rewrite * /404.html
+        file_server
+    }
+}
+
+# After editing:
+#   sudo caddy validate --config /etc/caddy/Caddyfile
+#   sudo systemctl reload caddy

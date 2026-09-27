@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="About — nerdstuckathome">
+  <div class="about-page">
+    <div class="avatar">L</div>
+    <h1>Hey, I'm Luca</h1>
+    <div class="prose">
+      <p>
+        Senior software engineer with about 17 years of experience, currently moving into AI
+        engineering. My background is mostly frontend (React, TypeScript), with the last few
+        years spent full-stack in Elixir and Phoenix LiveView.
+      </p>
+      <p>
+        I write about self-hosting, LLM tooling, frontend security and the occasional
+        deep-dive into whatever I'm currently stuck on — hence the name.
+      </p>
+      <p>
+        [Add more here: how you got into engineering, what nerdstuckathome is for, where to
+        find you.]
+      </p>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .about-page {
+    flex-grow: 1;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 56px 64px 80px;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .avatar {
+    width: 56px; height: 56px; border-radius: 16px;
+    background: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', Georgia, serif;
+    color: var(--bg);
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  h1 { font-size: 34px; margin-bottom: 24px; }
+
+  @media (max-width: 720px) {
+    .about-page { padding: 32px 20px 60px; }
+  }
+</style>
