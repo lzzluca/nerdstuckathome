@@ -5,6 +5,7 @@
 #   /var/www/nerdstuckathome already created + owned by that user on the server.
 
 set -euo pipefail
+cd "$(dirname "$0")/.."   # always run from repo root, wherever the script is invoked from
 
 VPS_HOST="luca@169.58.0.254" # e.g. luca@nerdstuckathome.com once DNS is live
 REMOTE_PATH="/var/www/nerdstuckathome"
