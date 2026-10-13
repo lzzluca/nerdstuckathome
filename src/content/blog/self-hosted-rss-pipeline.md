@@ -3,7 +3,7 @@ title: "Shipping a self-hosted RSS pipeline that feeds my own weekly digest"
 date: 2026-09-24
 excerpt: "How I wired FreshRSS, a scheduled job and a bit of prompt engineering together to turn a pile of feeds into one Sunday-morning summary — and what I'd do differently on a second pass."
 tags: ["self-hosting", "ai", "automation"]
-draft: false
+draft: true
 ---
 
 <!-- Draft skeleton — replace each section with the real thing. -->

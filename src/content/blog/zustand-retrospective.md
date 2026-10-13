@@ -3,7 +3,7 @@ title: "Zustand vs. everything else: a state management retrospective"
 date: 2026-08-09
 excerpt: "Three years, four projects, one library I keep reaching for."
 tags: ["react", "frontend"]
-draft: false
+draft: true
 ---
 
 <!-- Draft skeleton — replace each section with the real thing. -->

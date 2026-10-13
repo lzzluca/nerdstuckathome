@@ -3,7 +3,7 @@ title: "Phoenix LiveView after two years of React: what I miss, what I don't"
 date: 2026-09-02
 excerpt: "A full-stack pivot in the middle of a career, told through the bugs it produced."
 tags: ["elixir", "career"]
-draft: false
+draft: true
 ---
 
 <!-- Draft skeleton — replace each section with the real thing. -->

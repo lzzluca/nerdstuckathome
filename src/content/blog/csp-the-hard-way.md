@@ -3,7 +3,7 @@ title: "CSP the hard way: what three years of frontend security actually taught 
 date: 2026-09-14
 excerpt: "Content Security Policy sounds simple until real apps meet real browsers. Notes from being the go-to person for it."
 tags: ["security", "frontend"]
-draft: false
+draft: true
 ---
 
 <!-- Draft skeleton — replace each section with the real thing. -->

@@ -3,7 +3,7 @@ title: "Building a tiny on-device assistant for the Gemma hackathon"
 date: 2026-08-21
 excerpt: "Notes on model size trade-offs when your target hardware is an old Android phone."
 tags: ["ai", "android"]
-draft: false
+draft: true
 ---
 
 <!-- Draft skeleton — replace each section with the real thing. -->
