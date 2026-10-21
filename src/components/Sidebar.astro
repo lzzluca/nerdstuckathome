@@ -30,10 +30,7 @@ const { tags, activeTag } = Astro.props;
   </div>
 
   <div class="card badge">
-    <div class="badge-title">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/></svg>
-      Open to work
-    </div>
+    <h3>Open to work</h3>
     <p>Looking for applied AI engineering roles: agents, tool calling, LLM features in production. Remote or Netherlands.</p>
     <a href="https://www.linkedin.com/in/lzzluca" target="_blank" rel="noopener" class="card-link">Get in touch on LinkedIn</a>
   </div>
@@ -103,14 +100,10 @@ const { tags, activeTag } = Astro.props;
   .pill-active { background: var(--ink); color: var(--bg); }
 
   .badge { background: var(--badge-bg); border-color: var(--badge-border); gap: 8px; }
-  .badge-title {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 13px; font-weight: 700; color: var(--badge-ink);
-  }
-  .badge p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink-muted); }
-  .card-link { font-size: 13px; font-weight: 600; color: var(--badge-ink); }
+  .badge p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--ink-muted); }
+  .card-link { font-size: 14px; font-weight: 600; color: var(--badge-ink); }
 
-  .now h3 { font-size: 16px; }
+  .now h3, .badge h3 { font-size: 16px; }
   .now ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
   .now li { font-size: 14px; line-height: 1.5; }
   .now a { display: block; color: var(--ink-muted); }
