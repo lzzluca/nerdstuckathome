@@ -41,9 +41,9 @@ const { tags, activeTag } = Astro.props;
   <div class="card now">
     <h3>Now building</h3>
     <ul>
-      <li><a href="/posts/a-day-with-ink">Ink</a> — an agent that helps plan novels (public repo on GitHub soon)</li>
-      <li><a href="https://github.com/lzzluca/cspgen" target="_blank" rel="noopener">cspgen</a> — review and roll out CSP from the CLI</li>
-      <li><a href="/posts/gemma-hackathon">Luca</a> — on-device Gemma 4 assistant for elderly users</li>
+      <li><a href="/posts/a-day-with-ink"><strong>Ink</strong> — an agent that helps plan novels (public repo on GitHub soon)</a></li>
+      <li><a href="https://github.com/lzzluca/cspgen" target="_blank" rel="noopener"><strong>cspgen</strong> — review and roll out CSP from the CLI</a></li>
+      <li><a href="/posts/gemma-hackathon"><strong>Luca</strong> — on-device Gemma 4 assistant for elderly users</a></li>
     </ul>
   </div>
 </aside>
@@ -111,7 +111,10 @@ const { tags, activeTag } = Astro.props;
   .card-link { font-size: 13px; font-weight: 600; color: var(--badge-ink); }
 
   .now h3 { font-size: 16px; }
-  .now ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
-  .now li { font-size: 14px; line-height: 1.5; color: var(--ink-muted); }
-  .now a { font-weight: 600; color: var(--ink); }
+  .now ul { margin: 0 -10px; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 2px; }
+  .now li { font-size: 14px; line-height: 1.5; }
+  .now a { display: block; padding: 6px 10px; border-radius: 8px; color: var(--ink-muted); }
+  .now a:hover { text-decoration: none; background: var(--pill-bg); }
+  .now strong { font-weight: 600; color: var(--ink); }
+  .now a::after { content: " →" / ""; color: var(--ink-faint); }
 </style>
