@@ -28,24 +28,23 @@ reload environment files, and five stale watchers were still alive. Kill
 everything, restart, and log the provider and model at startup so this never
 costs an hour again.
 
-With a fast model, the real question could not be postponed: **what is Ink?**
-Not which tools, but what it is for. We ran a long interview, five rounds of
-numbered questions with a recommended answer each, and the answers reshaped
-the design:
+With a fast model, the question I had been postponing came up: what is Ink
+for? We ran a long interview, five rounds of numbered questions with a
+recommended answer each, and the answers reshaped the design:
 
-- Tools are typed on the **shape of a change** (create scenes, split a scene,
+- Tools are typed on the shape of a change (create scenes, split a scene,
   edit scenes, write the plot, review, read a scene, label a scene). The
   *intention* is free text, an `instruction` the chat writes for the writer.
   No "translate" tool, no "shorten" tool: those are instructions.
-- Two model roles. The **chat** routes, converses, and writes briefs. The
-  **writer** produces every piece of narrative: outlines, splits, prose,
+- Two model roles. The chat routes, converses, and writes briefs. The
+  writer produces every piece of narrative: outlines, splits, prose,
   edits, the plot. The reviewer runs on the writer's slot. Each is one
   system prompt with holes filled by code.
-- **Proposals are scenes.** Not ghost cards in the chat, but real rows in
-  the timeline with a `status` of `proposed` and a `replaces` pointer.
+- Proposals are scenes: real rows in the timeline with a `status` of
+  `proposed` and a `replaces` pointer, instead of ghost cards in the chat.
   Accepting one proposal that points at a scene is an edit; accepting two is
   a split. They are dashed in the timeline, where the user already lives.
-- **No limits, but visible tokens.** I was about to cap scenes per turn and
+- No limits, but visible tokens. I was about to cap scenes per turn and
   words per scene. The decision was the opposite: show what each turn cost
   under every reply and let the user decide.
 
@@ -79,11 +78,11 @@ entirely. The first one did not survive the evening.
 
 ## Evening: where the prose goes
 
-Back at the keyboard, the questions were about plumbing, and plumbing is
-where the money is.
+Back at the keyboard, the questions were about plumbing, which turned out
+to be where the tokens were going.
 
-**What does a tool return to the chat?** Not "the scene". The JSON object the
-tool's function returns, serialized into a message of role `tool`. And that
+What does a tool return to the chat? The JSON object the tool's function
+returns, serialized into a message of role `tool`. And that
 message joins the conversation history, which is sent again on every later
 turn until it falls out of the 40-message window. The writer's prose was in
 that object. So every scene Ink wrote was re-sent, in full, on every message
@@ -97,7 +96,7 @@ that one sentence. The chat never sees the prose unless it asks for it. The
 summary comes from the model that wrote the text, not from one reading an
 excerpt.
 
-**Why did the chat hallucinate duplicates?** After a split, the listing read
+Why did the chat hallucinate duplicates? After a split, the listing read
 "8. Title", "9. Title (PROPOSED)", "10. Title (PROPOSED)". Two lookalikes side
 by side, and the chat told the user there were duplicates to clean up. I had
 patched it with a sentence in the prompt. The better fix was structural: the
@@ -108,10 +107,10 @@ remember; a listing that states the relation gives it nothing to
 misremember.
 
 And since a prompt change cannot be unit-tested, the day ended with an
-**eval**: a shell script that plants two replacements of a scene through the
+eval: a shell script that plants two replacements of a scene through the
 API, asks the chat where that scene stands, and fails if the reply contains
-"duplicate". It passed twice. Not deterministic, but a thing to run every
-time the prompt or the listing changes. When there are three of these,
+"duplicate". It passed twice. The result is not deterministic, so it runs
+every time the prompt or the listing changes. When there are three of these,
 promptfoo; not before. The chat, incidentally, did better than pass: it
 noticed that accepting the two replacements would leave a causal hole two
 scenes later.
@@ -124,8 +123,8 @@ scenes later.
   to outline all eight scenes inside the instruction it sent to the writer.
 - Terms in English, in the product and in the code: outline, prose, split,
   write, instruction. The Italian stays in the conversation.
-- The real test is still not done: two different two-line prompts, end to
-  end, and then my own story. The machinery is there; the proof is not.
+- The end-to-end test is still not done: two different two-line prompts,
+  and then my own story.
 
 ## What is next
 
