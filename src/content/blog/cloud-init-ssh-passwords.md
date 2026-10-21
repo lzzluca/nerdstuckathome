@@ -16,11 +16,9 @@ Weeks later a deploy script asked me for a password. The script's own header sai
 
 The key problem turned out to be boring: the key simply wasn't in `authorized_keys` for my user. While checking that, `journalctl -u ssh` showed something more interesting: a steady stream of `Failed password for root` from IPs I'd never seen, a few seconds apart.
 
-Two things to unpack there.
+Root login was already disabled. sshd still logs a failed password attempt for root, it just never lets it succeed. So the log line alone doesn't tell you root is exposed. Worth knowing before you panic.
 
-First, root login was already disabled. sshd still logs a failed password attempt for root, it just never lets it succeed. So the log line alone doesn't tell you root is exposed. Worth knowing before you panic.
-
-Second, and worse: password authentication was on. Bots weren't getting in, but every account with a password was a target, and the only thing standing between them and my server was password strength.
+Worse, password authentication was on. Bots weren't getting in, but every account with a password was a target, and the only thing standing between them and my server was password strength.
 
 ## The cause: two files, one setting
 
@@ -41,7 +39,7 @@ The first is written by cloud-init from the provider's configuration when the ma
 
 Most config systems I know work as "last one wins": read everything, later values override earlier ones. sshd is the opposite: **for most options, the first value it reads wins**, and the drop-ins are read in alphabetical order. So `50-` beats `60-`, and passwords were on.
 
-The surprising part: that's by design. The Ubuntu image file used to be called `10-cloudimg-settings.conf`, and it was renamed to `60-` precisely so that it's read *after* cloud-init's `50-` file, letting cloud-init's settings take precedence. The image default is "no passwords", but whatever the provider asks cloud-init to configure wins. My provider asked for passwords, presumably so new customers can log in with the root password from the welcome email.
+That's by design. The Ubuntu image file used to be called `10-cloudimg-settings.conf`, and it was renamed to `60-` precisely so that it's read *after* cloud-init's `50-` file, letting cloud-init's settings take precedence. The image default is "no passwords", but whatever the provider asks cloud-init to configure wins. My provider asked for passwords, presumably so new customers can log in with the root password from the welcome email.
 
 Nothing was broken. I just never looked at what the provider had decided for me.
 
@@ -62,7 +60,7 @@ sudo sshd -t && sudo systemctl reload ssh
 
 ## Check the effective config, not the files
 
-This is the real lesson. Reading config files tells you what someone *wrote*. `sshd -T` tells you what sshd *uses*:
+Reading config files tells you what someone *wrote*. `sshd -T` tells you what sshd *uses*:
 
 ```bash
 sudo sshd -T | grep -Ei 'passwordauthentication|kbdinteractive|permitrootlogin'
