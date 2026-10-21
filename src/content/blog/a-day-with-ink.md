@@ -2,7 +2,7 @@
 title: "A day with Ink: from a few tools, to a writer that proposes"
 date: 2026-10-20
 excerpt: "Building an agent as writing assistant: introducing Ink."
-tags: ["security", "self-hosting"]
+tags: ["ai"]
 draft: false
 ---
 
