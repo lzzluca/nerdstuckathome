@@ -12,7 +12,7 @@ By the time I joined Workera I had spent almost ten years writing React: close t
 
 Workera's stack was Elixir and Phoenix LiveView. I didn't pick it, it was already there, and that was one of the most exciting parts of the new role: a language I had never used, a different way of building web apps, and a lot more backend than I was used to. I wanted to open my mind a bit and learn to think differently.
 
-The first months were intense. New language, new product, and real-time over WebSockets, which I had never really worked with. Intense, but very exciting.
+The first months were intense, and very exciting: new language, new product, and real-time over WebSockets, which I had never really worked with.
 
 ## The mental model shift
 
@@ -20,7 +20,7 @@ In React, the browser owns the state. You fetch data, keep it in a store, and th
 
 In LiveView it's the opposite. Each user has a long-lived process on the server, connected to the page over a WebSocket. The state lives there, in the socket's assigns. Events from the browser (a click, a form change) travel up the socket, the server updates the state, re-renders the template and sends back only the diff. There is no client store, no fetch layer, no API to design between frontend and backend. That's a lot of code you simply don't write.
 
-It also means the questions change. Not "where do I keep this state in the client?" but "how much of this do I want to keep in memory, on the server, for every connected user?"
+The questions change too. In React I asked where to keep this state in the client. In LiveView I ask how much of it I want to keep in memory, on the server, for every connected user.
 
 ## Bugs that taught me the most
 
@@ -36,7 +36,7 @@ This one surprised me more than it should have. In LiveView, a disabled button i
 
 We had a form where the save button was disabled for users who weren't allowed to save. Remove the attribute and the save went through. The server never checked.
 
-To be fair, this was our mistake more than LiveView's: the authorization check belonged in the `handle_event` on the server, and it wasn't there. But LiveView makes this mistake easy to make, because it feels like you are writing server code all the time. You are, but the events still come from a browser, and the browser is under the user's control. They don't even need the button: anyone with a browser console can push the event over the socket directly. The rule is the same as for any API: every event that changes data needs a server-side permission check, whatever the UI shows.
+This was our mistake more than LiveView's: the authorization check belonged in the `handle_event` on the server, and it wasn't there. But LiveView makes this mistake easy to make, because it feels like you are writing server code all the time. You are, but the events still come from a browser, and the browser is under the user's control. They don't even need the button: anyone with a browser console can push the event over the socket directly. The rule is the same as for any API: every event that changes data needs a server-side permission check, whatever the UI shows.
 
 ### React inside LiveView, and the state that lived twice
 
@@ -82,23 +82,23 @@ let liveSocket = new LiveSocket("/live", Socket, { hooks: Hooks, params: { _csrf
 
 Two details matter. `phx-update="ignore"` tells LiveView not to patch the DOM inside that element, because React owns it now. And the React root is created once, in `mounted`, not on every update.
 
-It worked, but the real cost was the state. Part of it lived in the LiveView assigns on the server, part of it in React state on the client, and keeping the two in sync was our job. Every bug in that area was a version of the same question: which side is right?
+It worked, but the cost was the state. Part of it lived in the LiveView assigns on the server, part of it in React state on the client, and keeping the two in sync was our job. Every bug in that area was a version of the same question: which side is right?
 
 ## What React still does better
 
-**It's a UI framework, and it shows.** Managing UI state and events comes out of the box. A simple example: LiveView has bindings for clicks, keys, focus and blur, but there's no double-click binding. You write a JS hook for it. In React it's `onDoubleClick`.
+It's a UI framework, and it shows. Managing UI state and events comes out of the box. A simple example: LiveView has bindings for clicks, keys, focus and blur, but there's no double-click binding. You write a JS hook for it. In React it's `onDoubleClick`.
 
-**The ecosystem.** Date pickers, rich text editors, drag and drop, charts, data grids: React has mature libraries for all of it, and LiveView mostly doesn't. In practice this is why so many LiveView apps end up embedding React or another JS library for the complex widgets, and then you're back to the integration problem above.
+The ecosystem is bigger. Date pickers, rich text editors, drag and drop, charts, data grids: React has mature libraries for all of it, and LiveView mostly doesn't. In practice this is why so many LiveView apps end up embedding React or another JS library for the complex widgets, and then you're back to the integration problem above.
 
-**State management is a solved problem.** After years of Redux, Context and Zustand, keeping state on the client is easy. In LiveView the state lives on the socket, in server memory, for every connected user. You have to keep it as light as possible and only store what you need. Passing data down to nested components also felt clunkier to me than props in React.
+State management is a solved problem. After years of Redux, Context and Zustand, keeping state on the client is easy. In LiveView the state lives on the socket, in server memory, for every connected user. You have to keep it as light as possible and only store what you need. Passing data down to nested components also felt clunkier to me than props in React.
 
 ## What LiveView still does better
 
-**No API layer between frontend and backend.** No REST endpoints or GraphQL schemas to design, no client-side fetching, no loading-state plumbing for every request. For a lot of features, a LiveView is a template and a few event handlers, and that's it.
+There is no API layer between frontend and backend. No REST endpoints or GraphQL schemas to design, no client-side fetching, no loading-state plumbing for every request. For a lot of features, a LiveView is a template and a few event handlers, and that's it.
 
-**Real-time comes for free.** The page is already connected over a socket. Pushing an update from the server to every user looking at a page is a few lines of PubSub, not a project.
+Real-time comes for free. The page is already connected over a socket, so pushing an update from the server to every user looking at a page takes a few lines of PubSub.
 
-**One language, one place.** The logic and the data live together on the server, in Elixir. That was exactly what I came for: I spent a lot more time thinking about the backend, and it made me a more complete engineer.
+Logic and data live together, on the server, in Elixir. That was exactly what I came for: I spent a lot more time thinking about the backend, and it made me a more complete engineer.
 
 ## Would I do it again?
 
