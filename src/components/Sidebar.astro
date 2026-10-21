@@ -35,7 +35,7 @@ const { tags, activeTag } = Astro.props;
       Open to work
     </div>
     <p>Looking for applied AI engineering roles: agents, tool calling, LLM features in production. Remote or Netherlands.</p>
-    <a href="https://www.linkedin.com/in/lzzluca" target="_blank" rel="noopener" class="card-link">Get in touch on LinkedIn →</a>
+    <a href="https://www.linkedin.com/in/lzzluca" target="_blank" rel="noopener" class="card-link">Get in touch on LinkedIn</a>
   </div>
 
   <div class="card now">
@@ -111,9 +111,11 @@ const { tags, activeTag } = Astro.props;
   .card-link { font-size: 13px; font-weight: 600; color: var(--badge-ink); }
 
   .now h3 { font-size: 16px; }
-  .now ul { margin: 0 -10px; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 2px; }
+  .now ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
   .now li { font-size: 14px; line-height: 1.5; }
-  .now a { display: block; padding: 6px 10px; border-radius: 8px; color: var(--ink-muted); }
-  .now a:hover { text-decoration: none; background: var(--pill-bg); }
+  .now a { display: block; color: var(--ink-muted); }
   .now strong { font-weight: 600; color: var(--ink); }
+  @media (hover: none) {
+    .now a::after, .card-link::after { content: " →" / ""; }
+  }
 </style>
