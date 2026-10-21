@@ -8,7 +8,7 @@ draft: false
 
 ## Why the switch happened
 
-By the time I joined Workera I had spent almost ten years writing React: close to two at ThoughtWorks, more than six at EclecticIQ, almost one at Intel 471. I was good at it, and that was part of the problem. I felt I was settling into a React mindset, thinking about every problem in terms of components, props and client state, and spending all my attention on the UI.
+By the time I joined Workera I had spent almost ten years writing React: close to two at Treatwell, more than six at EclecticIQ, almost one at Intel 471. I was good at it, and that was part of the problem. I felt I was settling into a React mindset, thinking about every problem in terms of components, props and client state, and spending all my attention on the UI.
 
 Workera's stack was Elixir and Phoenix LiveView. I didn't pick it, it was already there, and that was one of the most exciting parts of the new role: a language I had never used, a different way of building web apps, and a lot more backend than I was used to. I wanted to open my mind a bit and learn to think differently.
 
@@ -28,7 +28,7 @@ It also means the questions change. Not "where do I keep this state in the clien
 
 At some point we had a bug where the UI and the backend would lose each other. The ID that tied a LiveView session to its page wasn't deterministic, so when the connection dropped and the client tried to reconnect, the backend couldn't match it back to the right session. The result was a page that looked alive but behaved strangely.
 
-The worst part was that it happened at random. No reliable repro, no obvious error. We found it the slow way: by exclusion, ruling out one cause at a time. The lesson I took from it: in LiveView, the connection is part of your application state. A reconnect isn't a network detail, it's a code path, and it needs the same care as any other.
+The worst part was that it happened at random. No reliable repro, no obvious error. We spent a lot of time debugging without getting anywhere, because the real problem was reproducing it. When we finally managed to, it was partly trial and error, following one clue to the next. From there the fix came by exclusion: we removed everything we could prove was fine, until only a few suspects were left, and the session ID was one of them. The lesson I took from it: in LiveView, the connection is part of your application state. A reconnect isn't a network detail, it's a code path, and it needs the same care as any other.
 
 ### A disabled button is just an attribute
 
