@@ -31,10 +31,20 @@ const { tags, activeTag } = Astro.props;
 
   <div class="card badge">
     <div class="badge-title">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3f5a37" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-      Static · no database
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/></svg>
+      Open to work
     </div>
-    <p>Built with Astro and deployed straight from a git push — nothing to patch, nothing to get hacked.</p>
+    <p>Looking for applied AI engineering roles: agents, tool calling, LLM features in production. Remote or Netherlands.</p>
+    <a href="https://www.linkedin.com/in/lzzluca" target="_blank" rel="noopener" class="card-link">Get in touch on LinkedIn →</a>
+  </div>
+
+  <div class="card now">
+    <h3>Now building</h3>
+    <ul>
+      <li><a href="/posts/a-day-with-ink">Ink</a> — an agent that helps plan novels</li>
+      <li><a href="https://github.com/lzzluca/cspgen" target="_blank" rel="noopener">cspgen</a> — review and roll out CSP from the CLI</li>
+      <li><a href="/posts/gemma-hackathon">Luca</a> — on-device Gemma 4 assistant for elderly users</li>
+    </ul>
   </div>
 </aside>
 
@@ -98,4 +108,10 @@ const { tags, activeTag } = Astro.props;
     font-size: 13px; font-weight: 700; color: var(--badge-ink);
   }
   .badge p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink-muted); }
+  .card-link { font-size: 13px; font-weight: 600; color: var(--badge-ink); }
+
+  .now h3 { font-size: 16px; }
+  .now ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .now li { font-size: 14px; line-height: 1.5; color: var(--ink-muted); }
+  .now a { font-weight: 600; color: var(--ink); }
 </style>
