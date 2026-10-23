@@ -1,6 +1,6 @@
 ---
 title: "Moving house: why this blog now runs on my own server"
-date: 2026-09-28
+date: 2026-05-27
 excerpt: "After years on WordPress.com, Nerd stuck at home moves to its own domain and a server I run myself. The old posts stay where they are."
 tags: ["self-hosting"]
 draft: false
