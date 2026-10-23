@@ -1,6 +1,6 @@
 ---
 title: "Designing a self-hosted pipeline for my weekly news digest"
-date: 2026-10-24
+date: 2026-10-09
 excerpt: "Blogs, newsletters, YouTube and podcasts, all flowing into one FreshRSS instance on my VPS and summarized once a week. What already runs, and the architecture I'm building for the rest."
 tags: ["self-hosting", "ai", "automation"]
 draft: false
@@ -41,6 +41,7 @@ Text is easy for an LLM to summarize. A video or a podcast first has to become t
 FreshRSS (*_media, unread, ≤ 7 days old)
   → YouTube: fetch the transcript, fall back to Whisper
   → podcasts: download the episode from its public feed, transcribe with Whisper
+  → platform-exclusive podcasts: a fallback to get the audio, then Whisper
   → Claude CLI on the VPS: summarize each transcript
   → mark the item as read in FreshRSS
 ```
