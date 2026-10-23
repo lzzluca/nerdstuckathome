@@ -1,7 +1,7 @@
 ---
 title: "CSP the hard way: what rolling it out at Workera taught me"
 date: 2026-10-23
-excerpt: "A key customer asked for a strict Content Security Policy with a deadline. We planned two weeks; it took four months of removing inline scripts, chasing third-party vendors and teaching a new vocabulary to the whole engineering team."
+excerpt: "A key customer asked for a strict Content Security Policy with a deadline. We planned a month. It took four months of removing inline code, chasing third-party vendors and teaching a new vocabulary to the whole engineering team."
 tags: ["security", "frontend"]
 draft: false
 ---
@@ -10,11 +10,11 @@ draft: false
 
 I came to Workera with six years of frontend security experience from EclecticIQ, and for at least two years there I was the go-to person for Content Security Policy. On paper CSP is simple: the server sends a header listing where scripts, styles, images and connections may come from, and the browser blocks everything else. If an attacker manages to inject a script, the browser refuses to run it.
 
-The push came from outside. An important customer wanted CSP, gave us a deadline, and didn't accept `unsafe-inline`, the escape hatch that lets inline scripts run and that undoes most of what the policy protects against. We estimated two weeks. It took at least four months. Not full time, since it ran alongside other work, but four months all the same: first the components, then the templates, then the third-party software.
+The push came from outside. An important customer wanted CSP, gave us a deadline, and one requirement was no `unsafe-inline`, for scripts or for styles. `unsafe-inline` is the escape hatch that lets inline code run, and it undoes most of what the policy protects against. We estimated a month. It took at least four. Not full time, since it ran alongside other work, but four months all the same: first the components, then the templates, then the third-party software.
 
-## Removing the inline JavaScript
+## Removing the inline code
 
-Dropping `unsafe-inline` caused the most work, because we had a lot of inline JavaScript, much of it in templates that used Alpine.js. Alpine ships a CSP-compatible build, but we hadn't been using it, so the inline code had to be found and moved out, template by template.
+Dropping `unsafe-inline` caused the most work. On the style side, inline styles had to go. On the script side, we had a lot of inline JavaScript, much of it in templates that used Alpine.js. Alpine ships a CSP-compatible build, but we hadn't been using it, so the inline code had to be found and moved out, template by template.
 
 ## Where it breaks
 
@@ -46,7 +46,7 @@ That last point is why I started [cspgen](https://github.com/lzzluca/cspgen), an
 
 ## Takeaways
 
-- Whatever your estimate for CSP compliance is, it's probably low. Ours was two weeks; it took four months.
+- Whatever your estimate for CSP compliance is, it's probably low. Ours was a month; it took four.
 - Never enforce a policy you haven't run in report-only mode against real traffic.
 - Ask vendors about CSP before you integrate them.
 - When a library needs a fix, ask upstream before patching it locally.
