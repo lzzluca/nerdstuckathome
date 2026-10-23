@@ -86,3 +86,18 @@ code {
 }
 .prose ul, .prose ol { padding-left: 1.4em; }
 .prose img { max-width: 100%; height: auto; }
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.prose th,
+.prose td {
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+.prose th { background: var(--pill-bg-soft); color: var(--ink); }
