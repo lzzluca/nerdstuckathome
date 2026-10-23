@@ -8,133 +8,115 @@ draft: false
 
 *Originally published on my [old blog](https://nerdstuckathome.wordpress.com/2026/05/28/luca-gemma-4-latency-reduction-strategy/). For the story behind Luca, see [A local LLM for my parents' phone](/posts/gemma-hackathon).*
 
-## Measurements, design decisions, and why the architecture changed
-
-Recently, I had fun participating in the [Gemma 4 hackathon from Kaggle](https://www.kaggle.com/competitions/gemma-4-good-hackathon/writeups/new-writeup-1779054961877), building Luca:
+I recently had fun taking part in the [Gemma 4 hackathon on Kaggle](https://www.kaggle.com/competitions/gemma-4-good-hackathon/writeups/new-writeup-1779054961877), building Luca:
 
 > Luca is a Gemma-powered accessibility assistant. Gemma 4 is used as the reasoning layer over curated Android accessibility context. To make on-device interaction usable, Luca combines Gemma with structured perception, compact prompts, local ID mapping, deterministic safety checks, and immediate spoken feedback.
 
-One of the main challenges with running an offline LLM like Gemma on a low-to-mid-range phone CPU was the high latency encountered every time the model was queried.
+One of the main challenges of running an offline LLM like Gemma on a low-to-mid-range phone CPU was latency: every query to the model was slow.
 
-The original architecture put Gemma in the mandatory critical path too often: first to route the user transcript, and then again to reason over the screen. Manual measurements showed this is too slow for a voice assistant UX.
+The original architecture put Gemma on the critical path too often, first to route the user's transcript and then again to reason over the screen. Manual measurements showed that was too slow for a voice assistant.
 
-The new strategy keeps Gemma central for reasoning, but reduces latency by giving it compact inputs, minimal outputs, immediate progress feedback, and by reserving optional high-confidence/static command handling for actions that do not require model reasoning.
+The new strategy keeps Gemma central for reasoning and cuts latency in four ways: compact inputs, minimal outputs, immediate spoken feedback, and, later, a separate path for simple commands that don't need the model at all.
 
----
+A note on names: I built Luca in milestones. M1 used a keyword-based planner, M2B added a Gemma router in front of the screen reasoning, and M3 is the latency-first redesign described below.
 
-## 1. Problem discovered
+## The problem
 
-Luca is meant to help elderly or non-technical users operate their phone. That means the user experience depends heavily on quick spoken feedback. A 10-15 second silence after a simple command feels broken, even if the model eventually returns the correct JSON.
+Luca is meant to help elderly or non-technical people use their phone, so the experience depends on quick spoken feedback. A 10 to 15 second silence after a simple command feels broken, even if the model eventually returns the correct JSON.
 
-The early M2B design used a Gemma text-only pre-screen router for every turn. The router decided whether the utterance was a local tool, a screen question, a general answer, or a clarification. That was architecturally clean, but it put Gemma on the critical path for commands that should be nearly instant, such as changing language or moving the assistant bubble.
+The M2B design sent every turn through a text-only Gemma router before looking at the screen. The router decided whether the utterance was a local tool, a screen question, a general answer, or needed clarification. That was clean architecture, but it put Gemma on the critical path for commands that should be nearly instant, such as changing language or moving the assistant bubble.
 
-> **Key UX issue:** The user does not care that the internal routing is clean. If Luca waits 13 seconds before saying *“Certo, parlerò in italiano”*, the command feels unusable.
+The user doesn't care that the internal routing is clean. If Luca waits 13 seconds before saying *"Certo, parlerò in italiano"*, the command feels unusable.
 
----
+## What I measured
 
-## 2. Measurements collected
-
-These measurements came from manual device tests and Edge Gallery experiments while iterating on the router and screen-reasoning prompts. Exact timings vary by device/backend, but the pattern was consistent: prompt size, output size, and mandatory full-JSON completion have a large effect on perceived latency.
+These numbers come from manual tests on the device and in Google's [AI Edge Gallery](https://github.com/google-ai-edge/gallery) app, which runs models like Gemma on device, while I iterated on the router and screen-reasoning prompts. Exact timings vary by device and backend, but the pattern was consistent: prompt size, output size and waiting for the complete JSON dominate perceived latency.
 
 | Experiment | Scenario | Observed result | Conclusion |
 | --- | --- | --- | --- |
-| M2B router before compact optimization | “speak Italian” in app | router\_inference\_ms ≈ 14,747; turn\_total\_ms ≈ 14,955 | Tool itself took milliseconds; Gemma router dominated. |
-| M2B compact router after optimization | “speak Italian” in app | router inference\_ms ≈ 12,724; turn\_total\_ms ≈ 12,894; prompt ≈ 1,047 chars; output ≈ 42 chars; max tokens 64 | Compact prompt helped only ~2s; still too slow for local commands. |
-| Realistic text-only router prompt | Edge Gallery | ≈ 27s to complete JSON | Confirmed issue was not only the app; realistic JSON routing is expensive. |
-| GPU backend experiment | Edge Gallery GPU | Invalid/corrupted output | GPU was not a usable latency fix because output degenerated into nonsense. |
-| Rich UI tree + OCR anti-scam prompt | Edge Gallery | 54s and schema violation (target returned as string) | Too slow and not reliable enough for default synchronous UX. |
-| Medium compact screen map prompt | Facebook “save post” scenario | ≈ 26s | Better than rich prompt, but still too slow for frequent UI help. |
-| Ultra-compact UI target prompt | Elements list only; minimal JSON | ≈ 7.9s | Best observed Gemma path; still needs progress cue but becomes demo-usable. |
+| M2B router before compact optimization | "speak Italian" in app | router_inference_ms ≈ 14,747; turn_total_ms ≈ 14,955 | The tool itself took milliseconds; the Gemma router dominated. |
+| M2B compact router after optimization | "speak Italian" in app | router_inference_ms ≈ 12,724; turn_total_ms ≈ 12,894; prompt ≈ 1,047 chars; output ≈ 42 chars; max tokens 64 | The compact prompt saved only ~2 s; still too slow for local commands. |
+| Realistic text-only router prompt | Edge Gallery | ≈ 27 s to complete the JSON | The issue wasn't only the app: realistic JSON routing is expensive. |
+| GPU backend | Edge Gallery, GPU | Invalid, corrupted output | Not a usable fix: the output degenerated into nonsense. |
+| Rich UI tree + OCR anti-scam prompt | Edge Gallery | 54 s, and a schema violation (target returned as a string) | Too slow and not reliable enough for a synchronous default. |
+| Medium compact screen map | Facebook "save post" | ≈ 26 s | Better than the rich prompt, still too slow for frequent UI help. |
+| Ultra-compact UI target prompt | Element list only, minimal JSON | ≈ 7.9 s | The best Gemma path I measured; it still needs a progress cue, but it's usable in a demo. |
 
+## What the numbers taught me
 
+Gemma shouldn't be the event loop. It's valuable for reasoning, resolving ambiguity, explaining the screen and judging safety, but it shouldn't be called for every small routing or settings decision.
 
----
+Prompt size matters more than I expected: roughly 54 s for the rich prompt against roughly 8 s for the ultra-compact one. That's why M3 uses compact screen maps instead of raw UI trees.
 
-## 3. Main latency lessons
+So do output size and schema complexity. Luca can't safely act until the whole JSON object is generated and parsed, so even if the model starts producing tokens early, the app waits for the end. A smaller JSON finishes sooner.
 
-* **Gemma should not be the event loop:** Gemma remains valuable for reasoning, ambiguity resolution, screen explanation, and safety analysis. But it should not be called for every small routing or settings decision.
-* **Prompt size matters:** The difference between rich prompts and ultra-compact prompts was dramatic: roughly 54s versus roughly 8s in the tests. This is why M3 must use compact screen maps instead of raw UI trees.
-* **Output size and schema complexity matter:** Luca cannot safely act until a full JSON object has been generated and parsed. Even if the model starts generating earlier, the app waits for completion. Minimal JSON reduces completion time.
-* **Streaming perception differs from completion latency:** In Edge Gallery, users can see text stream in. Luca cannot execute a tool or highlight a target until it has valid structured output. That makes full-output latency more important than first-token latency.
-* **Immediate feedback changes perceived latency:** For screen tasks that genuinely need Gemma, Luca should say *“Sto controllando lo schermo…”* immediately, then continue processing. This prevents long silence.
+In Edge Gallery you watch the text stream in, which makes the model feel faster than it is. Luca can't run a tool or highlight a target until it has valid structured output, so full-output latency matters much more than time to first token.
 
----
+Finally, immediate feedback changes how long the wait feels. When a screen task really needs Gemma, Luca should say *"Sto controllando lo schermo…"* ("Checking the screen…") right away and keep working, instead of leaving the user in silence.
 
-## 4. Changes already made
+## What I've changed so far
 
 | Change | What changed | Why it matters |
 | --- | --- | --- |
-| **Compact M2B router prompt** | Reduced router prompt and JSON output; maxOutputTokens set to 64. | Improved latency slightly and reduced parse surface. |
-| **Semantic find\_app route Play Store-backed app discovery** | Collapsed launcher vs Play Store choices into one semantic app route. “Open/search app” now opens Play Store page/search and tells user to press Open or Install. | Gemma no longer chooses between device-specific launcher flows; app uses Play Store surface. More consistent across Android launchers; wording is honest. |
-| **GemmaReasoner responsibility cleanup** | Screen reasoner no longer chooses local tools; `tool_request` forced null/ignored. | Avoids two model prompts deciding tools. |
-| **Prompt ownership refactor** | Gemma prompt builders moved into `assistant-gemma`; app/session orchestrates. | Cleaner module boundaries. |
-| **Localized session/TTS fixes** | TTS locale reapplied on activation; no hardcoded English follow-up in GemmaReasoner. | Avoids Italian text spoken with English voice and vice versa. |
-| **Explicit M2B observation request** | ScreenContext route now drives explicit ObservationRequest; legacy M1 planner bypassed. | Avoids old keyword classifier overriding M2B routing. |
+| Compact M2B router prompt | Smaller router prompt and JSON output; `maxOutputTokens` set to 64. | Slightly lower latency and less output to parse. |
+| App discovery through the Play Store (`find_app`) | Launcher and Play Store options collapsed into one app route. "Open/search app" now opens the app's Play Store page or a search, and tells the user to press Open or Install. | Gemma no longer chooses between launcher flows that differ by device. The Play Store looks the same on every Android phone, and the wording stays honest. |
+| `GemmaReasoner` cleanup | The screen reasoner no longer picks local tools; `tool_request` is forced to null and ignored. | Two prompts no longer compete to decide tools. |
+| Prompt ownership refactor | Gemma prompt builders moved into `assistant-gemma`; the app/session layer orchestrates. | Cleaner module boundaries. |
+| Session and TTS locale fixes | The TTS locale is reapplied on activation; no hardcoded English follow-up in `GemmaReasoner`. | No more Italian text read with an English voice, or the other way round. |
+| Explicit M2B observation request | The screen-context route drives an explicit `ObservationRequest`; the M1 keyword planner is bypassed. | The old keyword classifier can't override M2B routing anymore. |
 
+## The M3 design: latency first
 
+M3 starts from structured perception, a compact screen map and minimal output by default. The raw accessibility tree and OCR data stay inside the app. Gemma gets a compact representation with stable IDs and returns a `target_id`, never coordinates.
 
----
+Here's what Gemma sees when the user asks *"How do I save this post?"* on the Facebook feed.
 
-## 5. M3 latency-first design
+Visible text:
 
-The updated M3 design is structured-perception-first, compact-screen-map-first, and minimal-output-by-default. Raw Accessibility tree and OCR data remain internal. Gemma receives a compact representation with stable IDs and returns a `target_id`, not coordinates.
+- T1 Facebook
+- T2 Anna Bianchi
+- T3 A beautiful walk in the park today
+- T4 Like
+- T5 Comment
+- T6 Share
 
-### Example Interaction
+Interactive elements:
 
-* **User request:** *“How do I save this post?”*
-* **App:** Facebook
-* **Screen:** feed
+- E1 Search
+- E2 Messenger
+- E3 Create post
+- E4 Post author profile: Anna Bianchi
+- E5 More options for this post
+- E6 Post image
+- E7 Like
+- E8 Comment
+- E9 Share
 
-#### Visible text:
-
-* T1 Facebook
-* T2 Anna Bianchi
-* T3 A beautiful walk in the park today
-* T4 Like
-* T5 Comment
-* T6 Share
-
-#### Interactive elements:
-
-* E1 Search
-* E2 Messenger
-* E3 Create post
-* E4 Post author profile: Anna Bianchi
-* E5 More options for this post
-* E6 Post image
-* E7 Like
-* E8 Comment
-* E9 Share
-
-#### Return JSON only:
+And it must return only this JSON:
 
 ```json
 {"say":"short answer","target_id":"ID or null","confidence":0.0}
 ```
 
-The app keeps the `target_id -> source -> bounds` registry internally. If Gemma returns `target_id` = `E5` and confidence is high enough, Luca maps E5 to bounds locally and highlights the correct element. This avoids asking Gemma to generate coordinates in the common case.
+The app keeps a `target_id -> source -> bounds` registry internally. If Gemma returns `target_id` = `E5` with high enough confidence, Luca maps E5 to its bounds locally and highlights the right element. In the common case, Gemma never has to generate coordinates.
 
----
+## Why not a local command matcher right away?
 
-## 6. Why not just use a local command matcher immediately?
+A local, high-confidence matcher would make common commands faster, but it brings its own risks: language coverage, false positives and brittle keyword logic. "Open Facebook" and "how do I open a bank account?" both contain "open", and only one of them is an app command.
 
-A local/high-confidence matcher would improve latency for common commands, but it introduces risks: language coverage, false positives, and brittle keyword logic.
+So the plan is to make M3 efficient first. If M3 plus the compact router is still too slow, I'll add a conservative `HighConfidenceIntentRouter`, or static command shortcuts with strict gates.
 
-For example, “open Facebook” and “how do I open a bank account?” both contain “open”, but only one is an app command.
+The two layers solve different problems. Compact screen maps make Gemma faster when screen reasoning is needed. A static command layer skips Gemma only for actions that need no reasoning at all: language, moving the bubble, trigger selection and app discovery.
 
-The current plan is to first make M3 efficient. If M3 plus compact routing is still too slow, implement a conservative `HighConfidenceIntentRouter` or static command shortcuts with strict gates.
+## The fast path: deferred, but probably needed
 
-> **Important distinction:** M3 compact screen maps optimize Gemma when screen reasoning is needed. A high-confidence/static command layer skips Gemma only for actions that do not need reasoning, such as language, bubble movement, trigger selection, or app discovery.
-
----
-
-## 7. HighConfidenceIntentRouter / static command layer: deferred but likely needed
-
-The deferred fast path should not be broad fuzzy matching. It should use strict slot/gate rules and prefer false negatives over false positives. Unknown cases fall back to Gemma.
+The fast path shouldn't be broad fuzzy matching. It should use strict slot and gate rules and prefer false negatives over false positives; anything uncertain falls back to Gemma.
 
 | Intent | Required gates | Positive examples | Negative examples |
 | --- | --- | --- | --- |
-| **language\_change** | language-change phrase + supported language | “speak Italian”, “parla italiano” | “speak about Italy”, “Italian restaurants” |
-| **move\_overlay** | movement intent + Luca/bubble context + position | “move to the top right”, “spostati in basso a destra” | “move the photo to the top right” |
-| **find\_app** | open/find/search verb + recognized app entity | “open Spotify”, “cerca YouTube” | “open a bank account”, “open source software” |
-| **screen\_context shortcut** | explicit screen/message/button/safety anchor | “where do I press?”, “is this message spam?” | “what should I do?” without screen anchor |
+| `language_change` | language-change phrase + supported language | "speak Italian", "parla italiano" | "speak about Italy", "Italian restaurants" |
+| `move_overlay` | movement intent + Luca/bubble context + position | "move to the top right", "spostati in basso a destra" | "move the photo to the top right" |
+| `find_app` | open/find/search verb + recognized app entity | "open Spotify", "cerca YouTube" | "open a bank account", "open source software" |
+| `screen_context` shortcut | explicit screen, message, button or safety anchor | "where do I press?", "is this message spam?" | "what should I do?" with no screen anchor |
+
+Gemma stays at the center of Luca. The work is in deciding when to call it: with the smallest prompt that's enough, for an answer that's as short as possible, and never for a command a strict rule can recognize on its own.
