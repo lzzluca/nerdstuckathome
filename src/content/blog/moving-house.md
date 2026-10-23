@@ -14,8 +14,6 @@ The domain is mine again. My old `nerdstuckathome.blog` expired in January 2025,
 
 The posts are files. Each one is Markdown in a Git repository, built into a static site with [Astro](https://astro.build/). No database, no admin panel, no ads or platform branding, and the whole history of every post is in `git log`.
 
-I decide the headers. On a static site I can set my own security headers, Content Security Policy included, instead of living with whatever the platform sends. After [years of rolling out CSP](/posts/csp-the-hard-way) on other people's apps, it would be odd not to do it on my own.
-
 One server does several jobs. The same small VPS that serves this blog also runs FreshRSS and the [pipeline behind my weekly news digest](/posts/self-hosted-rss-pipeline), so the blog costs nothing extra.
 
 The old blog isn't going anywhere. It stays online as an archive, and the older posts are still [over there](https://nerdstuckathome.wordpress.com).
