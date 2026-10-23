@@ -37,7 +37,7 @@ That constraint shaped the architecture. Running vision on every turn would have
 
 ## What worked, what didn't
 
-Latency was the weak spot. On the A55, turns that needed vision were too slow for a fluid conversation. For someone already unsure of what's happening on their screen, a long silence feels like the app is broken.
+Latency was the weak spot. On the A55, turns that needed vision were too slow for a fluid conversation. For someone already unsure of what's happening on their screen, a long silence feels like the app is broken. I measured where the time went, and what I changed, in [Luca + Gemma 4: Latency Reduction Strategy](/posts/luca-gemma-latency).
 
 The model itself surprised me. For a model this size, Gemma 4 did more than I expected:
 
