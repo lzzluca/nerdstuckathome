@@ -24,9 +24,9 @@ Then there are the third-party services, many of which don't support CSP at all.
 
 ## Asking the vendor instead of patching
 
-tldraw was the instructive case. I tested it against our policy and realized that making it compliant would be easy. I could have patched it myself, but a local patch is a liability: every upgrade can undo it, or bring in a new violation you only discover in production.
+The most instructive case was tldraw. I tested it against our policy and realized that making it compliant would be easy. I could have patched it myself, but a local patch is a liability: every upgrade can undo it, or bring in a new violation you only discover in production.
 
-So I contacted the tldraw team, and they were open to adding support. [The ticket is public](TODO-tldraw-ticket-url). A fix upstream helps everyone who runs the library under a strict policy, and it survives the next release.
+So I contacted the tldraw team, and they were open to adding support. [The ticket is public](https://github.com/tldraw/tldraw/issues/5153). A fix upstream helps everyone who runs the library under a strict policy, and it survives the next release.
 
 ## Teaching the team the vocabulary
 
