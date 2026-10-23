@@ -52,11 +52,15 @@ Time isn't a constraint, resources are. Whisper on a VPS CPU can take hours for 
 
 For summaries I'm using Claude CLI instead of a paid API. I already have a Claude subscription, so the pipeline calls Claude CLI on the VPS once per transcript. The constraint is staying within the plan's usage limits.
 
+That call runs headless with its tools switched off. A transcript is text written by someone else, and some of it could be written to steer an LLM. The summary step turns text into text, so it has no reason to be able to run anything, and with no tools a prompt injection hidden in a podcast has nothing to act on.
+
 The pipeline gets only the permissions it can't work without. A separate FreshRSS user just for it would be cleaner, and it's on the list for later.
 
-## What's already harder than expected
+## What the first tests showed
 
 YouTube blocks requests from my VPS's IP. For now the plan is to use cookies from a logged-in session on the server and see how often they expire. A VPN or a residential proxy are fallbacks if that turns out to be fragile.
+
+Whisper, on the other hand, was easier than I feared. In a first test on the VPS, `faster-whisper` with the `small` model transcribed 10 minutes of audio in 1.1 minutes, with a peak of 739 MB of RAM. Its weak spot is proper names (Whitenack became "Lightnack"), so the summary step also gets the episode title and description and is told to fix names from context.
 
 The other surprise is scope. "One place for my news" turned into an aggregator, a mail-to-feed bridge, a transcription pipeline and a scheduler. I'm keeping it simple on purpose: start with the smallest version that works, see how it behaves, and only then decide what's worth adding.
 
