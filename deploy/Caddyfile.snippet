@@ -8,6 +8,18 @@ nerdstuckathome.com, www.nerdstuckathome.com {
     file_server
     encode gzip zstd
 
+    # Security headers. The build has no scripts, no inline styles and no
+    # third-party resources, so the policy can be strict.
+    header {
+        Content-Security-Policy "default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests"
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "camera=(), microphone=(), geolocation=()"
+        Cross-Origin-Opener-Policy "same-origin"
+        -Server
+    }
+
     # Astro's static build already emits clean URLs (no .html needed),
     # but this makes 404s land on your own page instead of Caddy's default.
     handle_errors {
