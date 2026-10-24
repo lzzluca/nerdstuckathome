@@ -1,0 +1,13 @@
+views:
+  - type: table
+    name: Published
+    filters:
+      and:
+        - draft == false
+  - type: table
+    name: Drafts
+    filters:
+      and:
+        - draft == true
+  - type: table
+    name: All
