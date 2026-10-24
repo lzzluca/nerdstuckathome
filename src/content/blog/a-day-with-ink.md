@@ -6,6 +6,11 @@ tags: ["ai"]
 draft: false
 ---
 
+I'm building a writing app for authors who know what their story is but get
+stuck putting it on the page, on a scene or a dialogue. It's React on the
+front and a Fastify API behind it. These are my notes from one day of work on
+its agent, with Claude Code as my pair.
+
 The app is a planning board for a novel: scenes on a timeline, characters,
 a plot, notes, and an AI assistant called Ink in the right column. The rule
 that was never up for debate: **Ink writes nothing into the book on its own.
@@ -13,6 +18,8 @@ Everything it makes is a proposal the user accepts.**
 
 Yesterday Ink had four tools and a card for each proposal. Today it has a
 writer.
+
+![How Ink works at the end of the day: the user sends a message to the chat model; the chat model calls a tool with an instruction for the writer model; the writer streams prose into a proposed scene in the timeline, which replaces an existing scene once the user accepts it; the writer returns only the title, word count and a one-line summary to the chat, never the prose](/images/posts/ink-agent-flow.svg)
 
 ## Morning: the model, then the question
 

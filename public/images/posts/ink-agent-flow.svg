@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 296" width="760" height="296" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4a453b"/>
+    </marker>
+  </defs>
+  <rect width="760" height="296" fill="#f7f5f0"/>
+
+  <g font-size="14" text-anchor="middle">
+    <rect x="8" y="40" width="132" height="72" rx="8" fill="#fbfaf7" stroke="#e3ddd0"/>
+    <text x="74" y="70" font-weight="600" fill="#1c1a16">The user</text>
+    <text x="74" y="92" font-size="12" fill="#6b6558">in the chat column</text>
+
+    <rect x="250" y="40" width="170" height="72" rx="8" fill="#fbfaf7" stroke="#e3ddd0"/>
+    <text x="335" y="70" font-weight="600" fill="#1c1a16">Chat model</text>
+    <text x="335" y="92" font-size="12" fill="#6b6558">routes, talks, writes briefs</text>
+
+    <rect x="570" y="40" width="182" height="72" rx="8" fill="#fbfaf7" stroke="#e3ddd0"/>
+    <text x="661" y="70" font-weight="600" fill="#1c1a16">Writer model</text>
+    <text x="661" y="92" font-size="12" fill="#6b6558">writes all the narrative</text>
+  </g>
+
+  <g font-size="12" fill="#4a453b" text-anchor="middle">
+    <line x1="142" y1="66" x2="246" y2="66" stroke="#4a453b" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <text x="194" y="58">message</text>
+
+    <line x1="422" y1="62" x2="566" y2="62" stroke="#4a453b" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <text x="494" y="54">tool call + instruction</text>
+
+    <line x1="568" y1="94" x2="424" y2="94" stroke="#4a453b" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <text x="496" y="116">title, word count, summary</text>
+    <text x="496" y="131" fill="#b3542c">never the prose</text>
+
+    <line x1="661" y1="114" x2="661" y2="206" stroke="#4a453b" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <text x="654" y="160" text-anchor="end">prose streams in</text>
+
+    <path d="M74,114 L74,234 L246,234" fill="none" stroke="#4a453b" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <text x="162" y="226">accept or discard</text>
+  </g>
+
+  <rect x="250" y="178" width="502" height="100" rx="10" fill="none" stroke="#e3ddd0"/>
+  <text x="266" y="198" font-size="12" font-weight="600" fill="#6b6558">Timeline</text>
+
+  <g font-size="13" text-anchor="middle">
+    <rect x="290" y="208" width="190" height="52" rx="8" fill="#fbfaf7" stroke="#e3ddd0"/>
+    <text x="385" y="230" font-weight="600" fill="#1c1a16">8. A scene</text>
+    <text x="385" y="248" font-size="12" fill="#6b6558">current version</text>
+
+    <rect x="566" y="208" width="174" height="52" rx="8" fill="#fbfaf7" stroke="#b3542c" stroke-dasharray="5 4"/>
+    <text x="653" y="230" font-weight="600" fill="#1c1a16">9. Proposed</text>
+    <text x="653" y="248" font-size="12" fill="#b3542c">replaces scene 8</text>
+  </g>
+</svg>
