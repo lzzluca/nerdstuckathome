@@ -17,5 +17,3 @@ Second, the posts are just files: each one is Markdown in a Git repository, buil
 Third, one server does several jobs. The same small VPS that serves this blog also runs FreshRSS and the [pipeline behind my weekly news digest](/posts/self-hosted-rss-pipeline), so the blog costs nothing extra.
 
 And the old blog isn't going anywhere: it stays online as an archive, and the older posts are still [over there](https://nerdstuckathome.wordpress.com).
-
-Thanks for reading!
