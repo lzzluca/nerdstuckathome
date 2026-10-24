@@ -14,7 +14,7 @@ Table of contents
 2. What the logs showed
 3. The cause: two files, one setting
 4. The fix
-5. Check the effective config, not the files
+5. Checking the effective config
 6. Don't lock yourself out
 
 ## The setup
@@ -69,7 +69,7 @@ sudo sshd -t && sudo systemctl reload ssh
 
 `00-` is read before everything else, so it wins. All my hardening now lives in one file I own, and package or cloud-init updates don't touch it.
 
-## Check the effective config, not the files
+## Checking the effective config
 
 Reading config files tells you what someone *wrote*. `sshd -T` tells you what sshd *uses*:
 
@@ -94,9 +94,8 @@ Before turning off passwords:
 
 ## Takeaways
 
-- On cloud images, your SSH config isn't just `sshd_config`. Look at `sshd_config.d/`, and assume your provider put something there.
-- sshd is first-value-wins, so put your overrides in a `00-` file.
-- `sshd -T` is the source of truth. Test from outside with password auth forced.
-- `Failed password for root` doesn't mean root login is allowed.
+That's it! In short: on cloud images your SSH config isn't just `sshd_config`, so look at `sshd_config.d/` and assume your provider put something there. `sshd -T` is the source of truth, and a test from outside with password auth forced confirms it. And `Failed password for root` in the logs doesn't mean root login is allowed.
+
+Suggestion: sshd is first-value-wins, so put your overrides in a `00-` file!
 
 Thanks for reading!

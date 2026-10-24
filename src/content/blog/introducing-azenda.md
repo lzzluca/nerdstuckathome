@@ -6,7 +6,7 @@ tags: ["ai", "react"]
 draft: false
 ---
 
-I built my own task manager, and this post introduces it: aZenda, a task manager with a method built in and an assistant that runs the reviews.
+I built my own task manager, and this post introduces it: aZenda, a task manager with a method built in and an assistant that runs the reviews. The code is on [GitHub](https://github.com/lzzluca/azenda).
 
 Table of contents
 
@@ -23,7 +23,7 @@ Table of contents
 
 Building a task manager is a meme at this point: every developer ships one, and every one is a slightly different box for the same tasks. So, why another one?
 
-I love Todoist. I have used it for years and I am not leaving it out of spite. For the last two months I have run a fairly strict system on top of it: every project has a measurable target and a definition of done, one sprint at a time, backlogs reviewed monthly, and two labels to say what I look at next. The system is good. What Todoist doesn't give me is support for keeping it, and that is the one thing I wanted.
+I love Todoist. I have used it for years and I am not leaving it out of spite. For the last two months I have run a fairly strict system on top of it: every project has a measurable target and a definition of done, one sprint at a time, backlogs reviewed monthly, and two labels to say what I look at next. I think the system is good. What Todoist doesn't give me is support for keeping it, and that is the one thing I wanted.
 
 It failed in three ways, always the same three:
 
@@ -33,13 +33,13 @@ It failed in three ways, always the same three:
 
 Todoist is a neutral container, and that is a feature: it will hold any method. It just enforces none, and mine needed a hand. That can lead to a mess (it did, in my case), and mess turns into stress.
 
-Zen is one thing at a time, attention on what is in front of you, and letting go of what you don't need: that is the whole method at the heart of aZenda. One sprint, an iterative review that flags hanging tasks, and a process where deleting is as normal as keeping. The agenda stays calm, and so do I!
+Zen is one thing at a time, attention on what is in front of you, and letting go of what you don't need: that is the whole method behind aZenda. One sprint, an iterative review that flags hanging tasks, and a process where deleting is as normal as keeping. The agenda stays calm, and so do I!
 
 ## The idea
 
 aZenda does everything a task app does. On top of that, it turns stale items, repeated reschedules and missed deadlines into small daily decisions, keeps one sprint active at a time, and exposes its data to your own AI assistant so the review actually gets done.
 
-The first draft of this idea was harsher: hard caps on backlogs, at most five tasks in focus, no project without a deadline. I cut all of that (more on why below). What survived is *guided*: the app makes the mess visible and adds friction where it matters, but it never blocks you and it has no numeric limits. My reasoning: the moment a limit gets in the way, people route around it, and a rule people route around is worse than no rule.
+The first draft of this idea was harsher: hard caps on backlogs, at most five tasks in focus, no project without a deadline. I cut all of that (more on why below). What survived is *guided*: the app makes the mess visible and adds friction where it matters, but it never blocks you and it has no numeric limits. My reasoning: the moment a limit gets in the way, people route around it, and I think a rule people route around is worse than no rule.
 
 ## The model
 
@@ -53,7 +53,7 @@ Two built-in labels say *when* you look at something, while the list says *how c
 
 ## The review becomes a queue
 
-The monthly review is gone. In its place there is a queue of decisions, filled by rules that run on the data you already have:
+The monthly review (point 1 above) is gone. In its place there is a queue of decisions, filled by rules that run on the data you already have:
 
 - an item sits in the Inbox for 15 days
 - an item in a list has not been touched for 60 days
@@ -63,7 +63,7 @@ The monthly review is gone. In its place there is a queue of decisions, filled b
 
 Each matured item becomes a card with three or four buttons: keep, `next`, `radar`, drop the date, move it, delete it. Deleting is a first-class option, as normal as the others. Today shows three cards a day, which takes about a minute. When more than ten pile up, the app offers a review session: every card grouped by container, a visible 15-minute timer, and you stop whenever you want.
 
-Rescheduling escalates. A task you moved twice isn't asked for a third date; it is asked whether it should become `next`, go on `radar`, or lose its date. So the queue is what the review used to be, spread over the days when you would have skipped it.
+Rescheduling escalates, which is the answer to point 3. A task you moved twice isn't asked for a third date; it is asked whether it should become `next`, go on `radar`, or lose its date. So the queue is what the review used to be, spread over the days when you would have skipped it.
 
 ![The decision queue: Inbox, a list and next-or-a-date flow towards Done; a task untouched for 15 or 60 days or rescheduled twice drops into a Decide band (keep, next, radar, drop the date, move, delete), with delete as a first-class option; the one project rule is a passed sprint deadline: new target, close, or extend with a reason](/images/posts/azenda-decision-queue.svg)
 
@@ -71,7 +71,7 @@ The top row is the normal life of a task. Anything that stops moving drops into 
 
 ## Priority is derived
 
-I never managed to assign P1 to P4 honestly. "Important" is the part nobody can answer, which is why every task ends up P4 or every task ends up P1. So aZenda doesn't ask for a priority. It asks two questions that can be answered in five seconds: *is there a real deadline?* and *what happens if this never gets done?* (serious, mild, nothing). The priority falls out of the answers:
+I never managed to assign P1 to P4 honestly. I think "important" is the part nobody can really answer, which is why every task ends up P4 or every task ends up P1. So aZenda doesn't ask for a priority. It asks two questions that can be answered in five seconds: *is there a real deadline?* and *what happens if this never gets done?* (serious, mild, nothing). The priority falls out of the answers:
 
 - a real deadline with serious consequences is P1
 - one of the two is P2
@@ -84,7 +84,7 @@ Priority is also optional, and a task without one is fine. The questions come up
 
 ## The assistant is yours
 
-For the last few weeks I had been connecting Claude to my Todoist and asking it the review questions: what is old, what is duplicated, is this target real. That worked better than any filter, so I built it in, but without a chat box inside the app: aZenda ships an **MCP server**. You point the assistant you already pay for (Claude, ChatGPT, whatever speaks MCP) at `http://localhost:3001/mcp`, and it gets ten tools and one prompt.
+For the last few weeks I had been connecting Claude to my Todoist and asking it the review questions: what is old, what is duplicated, is this target real. That worked better than any filter, so I built it in, but without a chat box inside the app: aZenda ships an MCP server. You point the assistant you already pay for (Claude, ChatGPT, whatever speaks MCP) at `http://localhost:3001/mcp`, and it gets ten tools and one prompt.
 
 The tools are the review: `get_decisions` returns the queue, `decide` applies an action to one item, `set_priority` takes the two answers and derives the priority, `merge_tasks` folds a duplicate into the task you keep, and `update_project` refuses a sprint on a list and ends any other sprint when it starts one. The `review` prompt explains the method to the assistant: propose one action per decision and ask before applying it, refuse vague targets and suggest a measurable version, never guess a P1 to P4.
 
@@ -98,7 +98,7 @@ The first roadmap read like a list of prohibitions. Every one of them died in a 
 
 | Rule | Why it went |
 | --- | --- |
-| Hard cap on backlogs (20 items) | The user makes a second list. The cap moves the mess, it does not shrink it. |
+| Hard cap on backlogs (20 items) | The user makes a second list, so the cap just moves the mess somewhere else. |
 | At most five `next` tasks | Five of what? Five five-minute chores are not five afternoons. |
 | Every project needs a deadline | I can have ten projects ready and not know when I will start them. Only the one in sprint has a date. |
 | At most three active projects | "Active" already means "in sprint", and there is one sprint. The number was redundant. |
@@ -109,7 +109,7 @@ What is left is small: a list can't enter a sprint, one sprint at a time, and cl
 
 ## Where it stands
 
-Everything above is built and runs on my machine:
+Everything above, apart from the privacy switch, is built and runs on my machine:
 
 - React 19 and TypeScript in front
 - a small Node API behind (Hono, `node:sqlite`, no build step thanks to Node 24 type stripping)
@@ -120,6 +120,6 @@ Single user, no auth, 33 tests. The rules module is shared between the browser a
 
 Not done yet: recurring tasks and subtasks (needed for the project checkpoint), a per-container privacy switch for the assistant, the open-task trend over time, and running the importer against my real account. The next real test is a month of using it instead of Todoist, with the review done by Claude over MCP, and watching whether the single metric I care about, the number of open tasks, goes down.
 
-The code is on [GitHub](https://github.com/lzzluca/azenda). If you have a system that your task manager keeps letting you break, I'd like to hear which rule you would want built in, and which one you would route around.
+If you have a system that your task manager keeps letting you break, I'd like to hear which rule you would want built in, and which one you would route around.
 
 Thanks for reading!

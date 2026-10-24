@@ -41,7 +41,7 @@ Follow-up problem: the third-party services, many of which don't support CSP at 
 
 ## Asking the vendor instead of patching
 
-The most instructive case was tldraw. I tested it against our policy and realized that making it compliant would be easy. I could have patched it myself, but a local patch is a liability: every upgrade can undo it, or bring in a new violation that you only discover in production.
+The most instructive case was tldraw. I tested it against our policy and realized that making it compliant would be easy. I could have patched it myself, but in my opinion a local patch is a liability: every upgrade can undo it, or bring in a new violation that you only discover in production.
 
 So I contacted the tldraw team, and they were open to adding support ([the ticket is public](https://github.com/tldraw/tldraw/issues/5153)). A fix upstream helps everyone who runs the library under a strict policy, and it survives the next release.
 
@@ -63,9 +63,8 @@ Point 5 is the reason I started [cspgen](https://github.com/lzzluca/cspgen), an 
 
 ## Takeaways
 
-- Whatever your estimate for CSP compliance is, it's probably low: ours was a month, and it took four.
-- Never enforce a policy you haven't run in report-only mode against real traffic.
-- Ask vendors about CSP before you integrate them.
-- When a library needs a fix, ask upstream before patching it locally.
+Whatever your estimate for CSP compliance is, it's probably low (ours was a month, and it took four!). Also, ask vendors about CSP before you integrate them, and when a library needs a fix, ask upstream before patching it locally.
+
+Suggestion: never enforce a policy you haven't run in report-only mode against real traffic!
 
 Thanks for reading!

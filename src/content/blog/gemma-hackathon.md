@@ -49,11 +49,11 @@ The model itself surprised me: for a model this size, Gemma 4 did more than I ex
 - It returns the coordinates of elements in an image, which is what makes the red highlight box possible.
 - It spots scams even when no keyword gives them away, because it picks up on manipulation patterns like artificial pressure. "Buy now, this offer expires in 20 minutes!!" is exactly the kind of message it flags.
 
-The gap showed up when my parents tried it. They liked it, but the version they used was still buggy, and they showed me where the design falls short. "Tell me where to tap" is a one-turn request: one question, one answer, one red box. "This website wants me to register" isn't: it needs several rounds, with the assistant guiding, the user acting, and the assistant checking the result. Luca handles the first kind well and struggles with the second, and that kind of multi-turn back and forth is what most real requests look like.
+The gap showed up when my parents tried it. They liked it, but the version they used was still buggy, and they showed me where the design falls short. "Tell me where to tap" is a one-turn request: one question, one answer, one red box. "This website wants me to register" isn't: it needs several rounds, with the assistant guiding, the user acting, and the assistant checking the result. Luca handles the first kind well and struggles with the second, and I think that kind of multi-turn back and forth is what most real requests look like.
 
 ## Where this could go next
 
-Luca is a hackathon prototype, not a product. The list of things I'd fix first:
+Luca is still a hackathon prototype, and this is the list of things I'd fix first:
 
 - Multi-turn conversations, so tasks that take several steps actually get finished.
 - A dedicated registration helper, because sign-up flows are where elderly users get stuck most often (see point 2 in "Why on-device, why Gemma").
@@ -61,6 +61,12 @@ Luca is a hackathon prototype, not a product. The list of things I'd fix first:
 - Dialect support: many elderly Italians mostly speak a regional dialect at home.
 - Basics: onboarding, a settings screen, a stop button, and visual feedback while Luca is listening or speaking.
 
-The code is open source under Apache 2.0 at [lzzluca/luca](https://github.com/lzzluca/luca). There's a [video demo](https://youtu.be/aUE03TDudvA) and a [full write-up on Kaggle](https://www.kaggle.com/competitions/gemma-4-good-hackathon/writeups/new-writeup-1779054961877). Results haven't been announced yet as I write this.
+Results haven't been announced yet as I write this.
+
+## Some links
+
+- The code, open source under Apache 2.0: [lzzluca/luca](https://github.com/lzzluca/luca)
+- A [video demo](https://youtu.be/aUE03TDudvA)
+- The [full write-up on Kaggle](https://www.kaggle.com/competitions/gemma-4-good-hackathon/writeups/new-writeup-1779054961877)
 
 Thanks for reading!

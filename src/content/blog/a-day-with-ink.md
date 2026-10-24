@@ -111,15 +111,15 @@ duplicates to clean up. I had patched it with a sentence in the prompt, but
 the better fix was structural: the listing now says, on both sides, what the
 relation is. A proposal names the scene it replaces; a scene names the
 proposals waiting to replace it, "its possible next version, not
-duplicates". My reasoning: a prompt rule asks the model to remember, while a
+duplicates". My reasoning: a prompt rule asks the model to remember, while I think a
 listing that states the relation leaves it nothing to misremember.
 
 Final bit: a prompt change can't be unit-tested, so the day ended with an
 eval. It's a shell script that plants two replacements of a scene through the
 API, asks the chat where that scene stands, and fails if the reply contains
 "duplicate". It passed twice. The result is not deterministic, so it runs
-every time the prompt or the listing changes. When there are three of these,
-promptfoo; not before. The chat, by the way, did better than pass: it
+every time the prompt or the listing changes. When there are three of these, I'll
+move to promptfoo, not before. The chat, by the way, did better than pass: it
 noticed that accepting the two replacements would leave a causal hole two
 scenes later!
 

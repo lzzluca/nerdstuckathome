@@ -45,7 +45,7 @@ I keep every subscription on my main Gmail, and a filter there auto-forwards tho
 
 There are two reasons for the extra hop:
 
-1. Smaller attack surface. The script holds an OAuth token, and a token on a server can leak. If it does, an attacker reads newsletters, not my personal mail: least privilege, applied to a mailbox.
+1. Smaller attack surface. The script holds an OAuth token, and a token on a server can leak. If it does, an attacker can read my newsletters but not my personal mail (it's just least privilege, applied to a mailbox).
 2. The subscriptions survive the experiment, because they stay on my main account. If I lose the dedicated account, or scrap the whole project, I don't lose the newsletters: I delete one filter and they're back in my main inbox.
 
 Bonus: since I'm only forwarding, I didn't have to re-subscribe to anything.
@@ -100,7 +100,7 @@ Final bit: the last step is manual and happens once per newsletter. When its fir
 
 ## What's next
 
-The pipeline runs end to end: Gmail → mail2rss → FreshRSS, all on my own server. What's left:
+The pipeline works, but a few things are still open:
 
 - Production on Google. In Testing mode the token expires after 7 days, so for now I redo the consent once a week. Publishing the app needs a small public page, which I'll host on nerdstuckathome.com.
 - The first real issues. The feeds appear as the newsletters arrive, and I'll see how each one's HTML renders in FreshRSS.

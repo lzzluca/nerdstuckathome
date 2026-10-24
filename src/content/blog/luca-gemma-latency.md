@@ -54,7 +54,7 @@ These numbers come from manual tests, on the device and in Google's [AI Edge Gal
 
 ## What the numbers taught me
 
-1. Gemma shouldn't be the event loop. It's useful for reasoning, resolving ambiguity, explaining the screen and judging safety, but it shouldn't be called for every small routing or settings decision.
+1. In my opinion, Gemma shouldn't be the event loop. It's useful for reasoning, resolving ambiguity, explaining the screen and judging safety, but it shouldn't be called for every small routing or settings decision.
 2. Prompt size matters more than I expected: roughly 54 s for the rich prompt against roughly 8 s for the ultra-compact one. That's why M3 uses compact screen maps instead of raw UI trees.
 3. Output size and schema complexity matter too. Luca can't safely act until the whole JSON object is generated and parsed, so even if the model starts producing tokens early, the app waits for the end. A smaller JSON finishes sooner.
 4. Streaming can fool you. In Edge Gallery you watch the text stream in, which makes the model feel faster than it is. Luca can't run a tool or highlight a target until it has valid structured output, so full-output latency matters much more than time to first token.
@@ -114,11 +114,11 @@ A local, high-confidence matcher would make common commands faster, but it bring
 
 So the plan is to make M3 efficient first. If M3 plus the compact router is still too slow, I'll add a conservative `HighConfidenceIntentRouter`, or static command shortcuts with strict gates.
 
-The two layers solve different problems. Compact screen maps make Gemma faster when screen reasoning is needed. A static command layer skips Gemma only for actions that need no reasoning at all: language, moving the bubble, trigger selection and app discovery.
+The two layers solve different problems: compact screen maps make Gemma faster when screen reasoning is needed, while a static command layer skips Gemma only for actions that need no reasoning at all: language, moving the bubble, trigger selection and app discovery.
 
 ## The fast path: deferred, but probably needed
 
-The fast path shouldn't be broad fuzzy matching. It should use strict slot and gate rules and prefer false negatives over false positives, and anything uncertain falls back to Gemma.
+I think the fast path needs strict slot and gate rules instead of broad fuzzy matching: it should prefer false negatives over false positives, and anything uncertain falls back to Gemma.
 
 | Intent | Required gates | Positive examples | Negative examples |
 | --- | --- | --- | --- |
@@ -127,6 +127,6 @@ The fast path shouldn't be broad fuzzy matching. It should use strict slot and g
 | `find_app` | open/find/search verb + recognized app entity | "open Spotify", "cerca YouTube" | "open a bank account", "open source software" |
 | `screen_context` shortcut | explicit screen, message, button or safety anchor | "where do I press?", "is this message spam?" | "what should I do?" with no screen anchor |
 
-Gemma stays at the center of Luca. The work is in deciding when to call it: with the smallest prompt that's enough, for an answer that's as short as possible, and never for a command a strict rule can recognize on its own.
+So, in short: Gemma stays at the center of Luca, and the work is in deciding when to call it: with the smallest prompt that's enough, for an answer that's as short as possible, and never for a command a strict rule can recognize on its own.
 
 Thanks for reading!

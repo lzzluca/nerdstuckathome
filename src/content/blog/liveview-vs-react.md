@@ -19,7 +19,7 @@ Table of contents
 
 ## Why the switch happened
 
-Almost ten years of React: close to two at Treatwell, more than six at EclecticIQ, almost one at Intel 471. I was good at it, and that was part of the problem. I felt I was settling into a React mindset: thinking about every problem in terms of components, props and client state, and spending all my attention on the UI.
+Almost ten years of React: close to two at Treatwell, more than six at EclecticIQ, almost one at Intel 471. I was good at it, but I felt I was settling into a React mindset: thinking about every problem in terms of components, props and client state, and spending all my attention on the UI.
 
 Workera's stack was Elixir and Phoenix LiveView. I didn't pick it (it was already there), and it was one of the most exciting parts of the new role: a language I had never used, a different way of building web apps, and a lot more backend than I was used to. I wanted to open my mind a bit and learn to think differently.
 
@@ -41,11 +41,11 @@ At some point we had a bug where the UI and the backend would lose each other. P
 
 The worst part was that it happened at random: no reliable repro, no obvious error. We spent a lot of time debugging without getting anywhere, because the real problem was reproducing it. When we finally managed to, it was partly trial and error, following one clue to the next. From there the fix came by exclusion: we removed everything we could prove was fine, until only a few suspects were left, and the session ID was one of them.
 
-What I took from it: in LiveView, the connection is part of your application state. A reconnect is a code path like any other, and it needs the same care.
+What I took from it: in LiveView the connection is part of your application state. In other words: a reconnect is a code path like any other, and it needs the same care.
 
 ### A disabled button is just an attribute
 
-This one surprised me more than it should have. In LiveView, a disabled button is exactly that: a `<button disabled>` in the HTML. Open the dev tools, remove the attribute, click, and the event goes to the server like any other.
+This one surprised me more than it should have. In LiveView, a disabled button is exactly that: a `<button disabled>` in the HTML. Open the dev tools, remove the attribute, click, and the event goes to the server like any other (!).
 
 We had a form where the save button was disabled for users who weren't allowed to save. Remove the attribute and the save went through, because the server never checked.
 
@@ -106,7 +106,7 @@ It's a UI framework, and it shows: managing UI state and events comes out of the
 
 The ecosystem is bigger. Date pickers, rich text editors, drag and drop, charts, data grids: React has mature libraries for all of them, and LiveView mostly doesn't. In practice this is why so many LiveView apps end up embedding React or another JS library for the complex widgets... and then you're back to the integration problem above.
 
-State management is a solved problem. After years of Redux, Context and Zustand, keeping state on the client is easy. In LiveView the state lives on the socket, in server memory, for every connected user, so you have to keep it as light as possible and only store what you need. Passing data down to nested components also felt clunkier to me than props in React.
+In React I think state management is a solved problem: after years of Redux, Context and Zustand, keeping state on the client is easy. In LiveView the state lives on the socket, in server memory, for every connected user, so you have to keep it as light as possible and only store what you need. Passing data down to nested components also felt clunkier to me than props in React.
 
 ## What LiveView still does better
 
@@ -114,7 +114,7 @@ There is no API layer between frontend and backend: no REST endpoints or GraphQL
 
 Real-time comes for free. The page is already connected over a socket, so pushing an update from the server to every user looking at a page takes a few lines of PubSub.
 
-Logic and data live together, on the server, in Elixir. That was exactly what I came for: I spent a lot more time thinking about the backend, and it made me a more complete engineer.
+Logic and data live together, on the server, in Elixir. That was exactly what I came for: I spent a lot more time thinking about the backend, and I think it made me a more complete engineer.
 
 ## Would I do it again?
 

@@ -6,7 +6,7 @@ tags: ["self-hosting", "ai", "automation"]
 draft: false
 ---
 
-I follow a lot of sources on AI, system design, web development and finance, and they're scattered everywhere: blogs, email newsletters, YouTube channels, podcasts. Keeping up with them matters to me, both to keep learning and because it's the kind of knowledge that comes up in job interviews. Opening a different app for each of them doesn't work.
+I follow a lot of sources on AI, system design, web development and finance, and they're scattered everywhere: blogs, email newsletters, YouTube channels, podcasts. Keeping up with them matters to me, both to keep learning and because it's the kind of knowledge that comes up in job interviews. Opening a different app for each of them doesn't work for me.
 
 What I want is one place where everything lands, and one summary per topic on Sunday morning. Everything should run on my own server, with nothing to do by hand (I work from one Mac in the Netherlands and another one when I'm in Italy, and I don't want to configure anything twice).
 
@@ -56,8 +56,8 @@ FreshRSS (*_media, unread, ≤ 7 days old)
 
 A few decisions behind it:
 
-1. FreshRSS is the state. The pipeline processes unread items up to seven days old and marks each one as read when it's done. There's no local database of processed IDs to keep in sync: if an item is unread, it hasn't been handled.
-2. Time isn't a constraint, resources are. Whisper on a VPS CPU can take hours for one episode, and that's fine for a weekly digest. What I don't want is the pipeline starving FreshRSS or the blog on the same machine, so the limits (CPU and memory) live on the Docker container instead of in the code.
+1. FreshRSS is the state. The pipeline processes unread items up to seven days old and marks each one as read when it's done. There's no local database of processed IDs to keep in sync. That means: if an item is unread, it hasn't been handled yet.
+2. Resources are the real limit, much more than time. Whisper on a VPS CPU can take hours for one episode, and that's fine for a weekly digest. What I don't want is the pipeline starving FreshRSS or the blog on the same machine, so the limits (CPU and memory) live on the Docker container instead of in the code.
 3. Summaries go through Claude CLI instead of a paid API. I already have a Claude subscription, so the pipeline calls Claude CLI on the VPS once per transcript. The constraint is staying within the plan's usage limits.
 4. That call runs headless, with its tools switched off. A transcript is text written by someone else, and some of it could be written to steer an LLM. The summary step turns text into text, so it has no reason to be able to run anything, and with no tools a prompt injection hidden in a podcast has nothing to act on.
 5. The pipeline gets only the permissions it can't work without. A separate FreshRSS user just for it would be cleaner (it's on the list for later).
