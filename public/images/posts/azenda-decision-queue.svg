@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 400" role="img" aria-label="A task that stops moving becomes a decision, not a reminder" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13">
+  <defs>
+    <marker id="dq-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#9AA59F"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="34" font-size="15" font-weight="600" fill="currentColor">A task that stops moving becomes a decision, not a reminder</text>
+
+  <!-- connectors -->
+  <g fill="none" stroke="#9AA59F" stroke-width="1.25" marker-end="url(#dq-arrow)">
+    <path d="M175 112H207"/>
+    <path d="M357 112H389"/>
+    <path d="M539 112H571"/>
+    <path d="M100 136V204"/>
+    <path d="M282 136V204"/>
+    <path d="M464 136V204"/>
+    <path d="M100 268V316"/>
+  </g>
+
+  <!-- the life of a task -->
+  <rect x="25" y="88" width="150" height="48" rx="8" fill="none" stroke="#9AA59F" stroke-width="1.25"/>
+  <text x="100" y="116" text-anchor="middle" fill="currentColor">Inbox</text>
+  <rect x="207" y="88" width="150" height="48" rx="8" fill="none" stroke="#9AA59F" stroke-width="1.25"/>
+  <text x="282" y="116" text-anchor="middle" fill="currentColor">A list</text>
+  <rect x="389" y="88" width="150" height="48" rx="8" fill="none" stroke="#9AA59F" stroke-width="1.25"/>
+  <text x="464" y="116" text-anchor="middle" fill="currentColor">next, or a date</text>
+  <rect x="571" y="88" width="150" height="48" rx="8" fill="#3A6FD8" fill-opacity="0.12" stroke="#3A6FD8" stroke-width="2"/>
+  <text x="646" y="116" text-anchor="middle" font-weight="600" fill="currentColor">Done</text>
+
+  <text x="110" y="156" font-size="11.5" fill="#65716A">untouched 15 days</text>
+  <text x="292" y="156" font-size="11.5" fill="#65716A">untouched 60 days</text>
+  <text x="474" y="156" font-size="11.5" fill="#65716A">rescheduled twice</text>
+
+  <!-- the decision band -->
+  <rect x="25" y="204" width="514" height="64" rx="8" fill="#DD8209" fill-opacity="0.12" stroke="#DD8209" stroke-width="2"/>
+  <text x="282" y="232" text-anchor="middle" font-weight="600" fill="currentColor">Decide: keep · next · radar · drop the date · move · delete</text>
+  <text x="282" y="252" text-anchor="middle" font-size="11.5" fill="#65716A">keep resets the clock · a moved task escalates: date → next → radar → no date</text>
+
+  <text x="110" y="292" font-size="11.5" fill="#65716A">a first-class option</text>
+  <rect x="25" y="316" width="150" height="48" rx="8" fill="none" stroke="#9AA59F" stroke-width="1.25"/>
+  <text x="100" y="344" text-anchor="middle" fill="currentColor">Delete it</text>
+
+  <!-- the one project rule -->
+  <text x="646" y="202" text-anchor="middle" font-size="11.5" fill="#65716A">the one project rule</text>
+  <rect x="556" y="212" width="180" height="48" rx="8" fill="none" stroke="#9AA59F" stroke-width="1.25"/>
+  <text x="646" y="240" text-anchor="middle" fill="currentColor">Sprint deadline passed</text>
+  <text x="736" y="278" text-anchor="end" font-size="11.5" fill="#65716A">new target, close, or extend with a reason</text>
+</svg>
