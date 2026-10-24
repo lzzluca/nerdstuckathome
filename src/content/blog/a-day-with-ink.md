@@ -6,17 +6,13 @@ tags: ["ai"]
 draft: false
 ---
 
-*2026-10-20. Notes from building the agent of a novel-planning app, with
-Claude Code as pair. Twenty commits, one grilling session, and a few things
-I had to be told twice.*
-
 The app is a planning board for a novel: scenes on a timeline, characters,
 a plot, notes, and an AI assistant called Ink in the right column. The rule
 that was never up for debate: **Ink writes nothing into the book on its own.
 Everything it makes is a proposal the user accepts.**
 
-Yesterday Ink had four tools and a card for each proposal. Today it has a
-writer.
+Ink started with limited superpowers, just a few tools, and today it is
+capable of driving an agentic flow for writing a novel.
 
 ## Morning: the model, then the question
 
