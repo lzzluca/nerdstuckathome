@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 320" width="760" height="320" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4a453b"/>
+    </marker>
+  </defs>
+  <rect width="760" height="320" fill="#f7f5f0"/>
+
+  <g font-size="12" font-weight="600" fill="#b3542c">
+    <text x="8" y="28">BEFORE (M2B)</text>
+    <text x="8" y="166">M3 DESIGN, FOR A SCREEN QUESTION</text>
+  </g>
+
+  <g font-size="14" text-anchor="middle">
+    <rect x="8" y="40" width="124" height="72" rx="8" fill="#fbfaf7" stroke="#e3ddd0"/>
+    <text x="70" y="70" font-weight="600" fill="#1c1a16">User request</text>
+    <text x="70" y="92" font-size="12" fill="#6b6558">voice transcript</text>
+
+    <rect x="164" y="40" width="168" height="72" rx="8" fill="#fbfaf7" stroke="#b3542c"/>
+    <text x="248" y="70" font-weight="600" fill="#1c1a16">Gemma router</text>
+    <text x="248" y="92" font-size="12" fill="#b3542c">13 to 15 s, every turn</text>
+
+    <rect x="364" y="40" width="190" height="72" rx="8" fill="#fbfaf7" stroke="#b3542c"/>
+    <text x="459" y="70" font-weight="600" fill="#1c1a16">Gemma on the screen</text>
+    <text x="459" y="92" font-size="12" fill="#b3542c">rich UI tree: up to 54 s</text>
+
+    <rect x="586" y="40" width="166" height="72" rx="8" fill="#fbfaf7" stroke="#e3ddd0"/>
+    <text x="669" y="70" font-weight="600" fill="#1c1a16">Tool or answer</text>
+    <text x="669" y="92" font-size="12" fill="#6b6558">after full JSON</text>
+
+    <rect x="8" y="178" width="124" height="72" rx="8" fill="#fbfaf7" stroke="#e3ddd0"/>
+    <text x="70" y="208" font-weight="600" fill="#1c1a16">Screen question</text>
+    <text x="70" y="230" font-size="12" fill="#6b6558">"save this post?"</text>
+
+    <rect x="164" y="178" width="168" height="72" rx="8" fill="#fbfaf7" stroke="#e3ddd0"/>
+    <text x="248" y="208" font-weight="600" fill="#1c1a16">Compact screen map</text>
+    <text x="248" y="230" font-size="12" fill="#6b6558">elements with stable IDs</text>
+
+    <rect x="364" y="178" width="190" height="72" rx="8" fill="#fbfaf7" stroke="#e3ddd0"/>
+    <text x="459" y="208" font-weight="600" fill="#1c1a16">Gemma, minimal JSON</text>
+    <text x="459" y="230" font-size="12" fill="#6b6558">say, target_id: ≈ 7.9 s</text>
+
+    <rect x="586" y="178" width="166" height="72" rx="8" fill="#fbfaf7" stroke="#e3ddd0"/>
+    <text x="669" y="208" font-weight="600" fill="#1c1a16">Local registry</text>
+    <text x="669" y="230" font-size="12" fill="#6b6558">target_id → bounds</text>
+
+    <rect x="164" y="270" width="168" height="40" rx="8" fill="#fbfaf7" stroke="#b3542c" stroke-dasharray="5 4"/>
+    <text x="248" y="295" font-size="12" fill="#1c1a16">"Checking the screen…"</text>
+  </g>
+
+  <g stroke="#4a453b" stroke-width="1.5" fill="none">
+    <line x1="134" y1="76" x2="160" y2="76" marker-end="url(#arrow)"/>
+    <line x1="334" y1="76" x2="360" y2="76" marker-end="url(#arrow)"/>
+    <line x1="556" y1="76" x2="582" y2="76" marker-end="url(#arrow)"/>
+
+    <line x1="134" y1="214" x2="160" y2="214" marker-end="url(#arrow)"/>
+    <line x1="334" y1="214" x2="360" y2="214" marker-end="url(#arrow)"/>
+    <line x1="556" y1="214" x2="582" y2="214" marker-end="url(#arrow)"/>
+    <path d="M70,252 L70,290 L160,290" marker-end="url(#arrow)"/>
+  </g>
+
+  <text x="346" y="295" font-size="12" fill="#6b6558">spoken right away, while Gemma works</text>
+</svg>

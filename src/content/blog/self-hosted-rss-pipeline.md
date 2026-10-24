@@ -22,6 +22,8 @@ Blogs and sites already speak RSS. Newsletters don't, so I wrote mail2rss, a sma
 
 Every Sunday, scheduled Claude tasks read FreshRSS and write one digest per topic: AI, system design, web and frontend, finance.
 
+![The whole setup: blogs and sites feed FreshRSS on my VPS directly; newsletters go through mail2rss, which reads a dedicated Gmail with a read-only token; YouTube channels and podcasts land in separate media categories. Scheduled Claude tasks write the Sunday digests from the text categories. The media pipeline, still being built, will transcribe the media items, summarize them with Claude CLI with its tools switched off, and mark them as read in FreshRSS](/images/posts/news-pipeline.svg)
+
 ## How the feeds are organized
 
 Each topic has two FreshRSS categories:

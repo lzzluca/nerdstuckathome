@@ -6,7 +6,6 @@ import Sidebar from '../components/Sidebar.astro';
 const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-const [featured, ...rest] = allPosts;
 const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))];
 
 const dateFmt = (d: Date) =>
@@ -15,22 +14,7 @@ const dateFmt = (d: Date) =>
 <BaseLayout title="nerdstuckathome — posts">
   <div class="body-grid">
     <main>
-      {featured && (
-        <article class="featured">
-          <div class="meta">
-            <span class="eyebrow">Featured</span>
-            <span class="dot">·</span>
-            <span class="date">{dateFmt(featured.data.date)}</span>
-          </div>
-          <h1><a href={`/posts/${featured.id}`}>{featured.data.title}</a></h1>
-          <p class="excerpt">{featured.data.excerpt}</p>
-          <div class="tags">
-            {featured.data.tags.map((tag) => <span class="tag-pill">{tag}</span>)}
-          </div>
-        </article>
-      )}
-
-      {rest.map((post) => (
+      {allPosts.map((post) => (
         <article class="post-row">
           <div class="date">{dateFmt(post.data.date)}</div>
           <h2><a href={`/posts/${post.id}`}>{post.data.title}</a></h2>
@@ -64,21 +48,6 @@ const dateFmt = (d: Date) =>
   }
   main { grid-column: span 8; display: flex; flex-direction: column; gap: 44px; }
 
-  .featured {
-    display: flex; flex-direction: column; gap: 14px;
-    padding-bottom: 36px;
-    border-bottom: 1px solid var(--border);
-  }
-  .featured .meta {
-    display: flex; align-items: center; gap: 10px;
-    font-size: 13px; font-weight: 600; color: var(--accent);
-    text-transform: uppercase; letter-spacing: 0.04em;
-  }
-  .featured .dot { color: #c9c2b3; }
-  .featured .date { color: var(--ink-faint); text-transform: none; letter-spacing: normal; }
-  .featured h1 { font-size: 40px; line-height: 1.15; }
-  .featured h1 a { color: var(--ink); }
-  .featured h1 a:hover { text-decoration: none; }
   .excerpt { margin: 0; font-size: 17px; line-height: 1.6; color: var(--ink-muted); max-width: 640px; }
   .tags { display: flex; gap: 8px; margin-top: 4px; }
 

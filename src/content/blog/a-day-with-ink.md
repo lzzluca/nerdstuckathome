@@ -1,10 +1,15 @@
 ---
-title: "A day with Ink: from a few tools, to a writer that proposes"
+title: "A day with Ink: from a few tools to a writer that proposes"
 date: 2026-10-20
-excerpt: "Building an agent as writing assistant: introducing Ink."
+excerpt: "Building an agent as a writing assistant: introducing Ink."
 tags: ["ai"]
 draft: false
 ---
+
+I'm building a writing app for authors who know what their story is but get
+stuck putting it on the page, on a scene or a dialogue. It's React on the
+front and a Fastify API behind it. These are my notes from one day of work on
+its agent, with Claude Code as my pair.
 
 The app is a planning board for a novel: scenes on a timeline, characters,
 a plot, notes, and an AI assistant called Ink in the right column. The rule
@@ -13,6 +18,8 @@ Everything it makes is a proposal the user accepts.**
 
 Ink started with limited superpowers, just a few tools, and today it is
 capable of driving an agentic flow for writing a novel.
+
+![How Ink works at the end of the day: the user sends a message to the chat model; the chat model calls a tool with an instruction for the writer model; the writer streams prose into a proposed scene in the timeline, which replaces an existing scene once the user accepts it; the writer returns only the title, word count and a one-line summary to the chat, never the prose](/images/posts/ink-agent-flow.svg)
 
 ## Morning: the model, then the question
 
@@ -110,17 +117,6 @@ every time the prompt or the listing changes. When there are three of these,
 promptfoo; not before. The chat, incidentally, did better than pass: it
 noticed that accepting the two replacements would leave a causal hole two
 scenes later.
-
-## What I had to be told
-
-- "Ten messages of history for the writer?" Why ten. The writer gets the
-  same trimmed history the chat has. Arbitrary numbers are a smell.
-- "The instruction is a brief, not the work." The chat's first instinct was
-  to outline all eight scenes inside the instruction it sent to the writer.
-- Terms in English, in the product and in the code: outline, prose, split,
-  write, instruction. The Italian stays in the conversation.
-- The end-to-end test is still not done: two different two-line prompts,
-  and then my own story.
 
 ## What is next
 

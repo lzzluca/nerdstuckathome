@@ -1,7 +1,7 @@
 ---
-title: "Luca + Gemma 4: Latency Reduction Strategy"
+title: "On-device Gemma 4: cutting latency from 54 seconds to under 8"
 date: 2026-05-28
-excerpt: "Measurements, design decisions, and why Luca's architecture changed: from a 54-second prompt to under 8 seconds, by keeping Gemma out of the event loop."
+excerpt: "Measurements, design decisions, and why the assistant's architecture changed: from a 54-second prompt to under 8 seconds, by keeping Gemma out of the event loop."
 tags: ["ai", "android"]
 draft: false
 ---
@@ -68,6 +68,8 @@ Finally, immediate feedback changes how long the wait feels. When a screen task 
 ## The M3 design: latency first
 
 M3 starts from structured perception, a compact screen map and minimal output by default. The raw accessibility tree and OCR data stay inside the app. Gemma gets a compact representation with stable IDs and returns a `target_id`, never coordinates.
+
+![Before and after. In M2B every request went through a Gemma router (13 to 15 seconds) and then Gemma reasoned over a rich UI tree (up to 54 seconds) before any tool or answer. In the M3 design a screen question becomes a compact screen map with stable IDs, Gemma returns a minimal JSON in about 7.9 seconds, and a local registry maps the target ID to screen bounds, while the assistant immediately says it is checking the screen](/images/posts/gemma-latency-before-after.svg)
 
 Here's what Gemma sees when the user asks *"How do I save this post?"* on the Facebook feed.
 
