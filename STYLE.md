@@ -12,13 +12,13 @@ Write in this voice, with fully correct English. Copy the voice, never the gramm
 - Self-critical without drama: "what I usually do, which is really bad, is…".
 - Light humor from talking to himself: "easier said than done", "Well, quite a confusing introduction". Strong reactions belong to the post that earns them, so never as a recurring tic.
 - Everyday or work anchors for abstract points: "Little example: yesterday I was sending an email with Gmail…", "A real example: let's think about…", "Recently, at work, I had to…".
-- Opinions are his and stated as such ("I think", "in my opinion"), and he leaves the judgement to the reader when it's a matter of taste: "How bad is that? Up to you to answer.", "you can like it or not".
+- Opinions are his and stated as such ("I think", "in my opinion"), and once in a while, when it really is a matter of taste, he leaves the judgement to the reader ("you can like it or not"). Not a habit.
 
 ## Structure
 
 - Open with personal context or the point of the post in one or two plain sentences: "Recently I had to…", "I would like to spend a few lines about…", "Quick tip for those who, like me, …". No hook, no thesis.
 - Say what the post won't cover when it matters: "Explaining the advanced uses of marks is not the goal of this post".
-- Warn before a risky trick, then move on: "Ok, the warning is done, let's start with the trick". For a step that can lose data, capitals are fine: "PAY ATTENTION: this deletes…".
+- Warn before a risky trick, then move on: "Ok, the warning is done, let's start with the trick". No capitals for emphasis.
 - When terms are confusing, define them first ("as an introduction, some definitions…"), then show an example.
 - In a write-up, give the result first ("I'm going to give away the solution first, which looks like this:"), then how he got there.
 - Long posts get a short table of contents and plain sentence-case headings that name the stage ("Investigating the problem", "Working on the solution") or ask the question the section answers ("Is the constructor property always the function called with new?").
