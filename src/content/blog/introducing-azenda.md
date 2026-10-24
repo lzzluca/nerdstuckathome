@@ -67,7 +67,7 @@ Each matured item becomes a card with three or four buttons: keep, `next`, `rada
 
 Rescheduling escalates, which is the answer to point 3. A task you moved twice isn't asked for a third date; it is asked whether it should become `next`, go on `radar`, or lose its date. So the queue is what the review used to be, spread over the days when you would have skipped it.
 
-![The decision queue: Inbox, a list and next-or-a-date flow towards Done; a task untouched for 15 or 60 days or rescheduled twice drops into a Decide band (keep, next, radar, drop the date, move, delete), with delete as a first-class option; the one project rule is a passed target deadline: new target, close, or extend with a reason](/images/posts/azenda-decision-queue.svg)
+![The decision queue: Inbox, a list and next-or-a-date flow towards Done; a task untouched for 15 or 60 days, rescheduled twice or on radar for 30 days drops into a Decide band (keep, next, radar, drop the date, move, delete), with delete as a first-class option; the only project rule is a passed target deadline: new target, close, or extend with a reason](/images/posts/azenda-decision-queue.svg)
 
 The top row is the normal life of a task. Anything that stops moving drops into the orange band and asks for one decision: "keep" resets its clock, the rest move it along or out.
 
