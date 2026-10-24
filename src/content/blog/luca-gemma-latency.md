@@ -14,23 +14,33 @@ I recently had fun taking part in the [Gemma 4 hackathon on Kaggle](https://www.
 
 One of the main challenges of running an offline LLM like Gemma on a low-to-mid-range phone CPU was latency: every query to the model was slow.
 
-The original architecture put Gemma on the critical path too often, first to route the user's transcript and then again to reason over the screen. Manual measurements showed that was too slow for a voice assistant.
+I'm going to give away the result first: the slowest prompt I measured took 54 seconds, and the ultra-compact one the new design is built on took about 7.9 seconds. Gemma stays central for reasoning, and the latency goes down in four ways: compact inputs, minimal outputs, immediate spoken feedback and, later, a separate path for simple commands that don't need the model at all.
 
-The new strategy keeps Gemma central for reasoning and cuts latency in four ways: compact inputs, minimal outputs, immediate spoken feedback, and, later, a separate path for simple commands that don't need the model at all.
+How I got there: the original architecture put Gemma on the critical path too often, first to route the user's transcript and then again to reason over the screen. Manual measurements showed that was too slow for a voice assistant.
 
 A note on names: I built Luca in milestones. M1 used a keyword-based planner, M2B added a Gemma router in front of the screen reasoning, and M3 is the latency-first redesign described below.
+
+Table of contents
+
+1. The problem
+2. What I measured
+3. What the numbers taught me
+4. What I've changed so far
+5. The M3 design: latency first
+6. Why not a local command matcher right away?
+7. The fast path: deferred, but probably needed
 
 ## The problem
 
 Luca is meant to help elderly or non-technical people use their phone, so the experience depends on quick spoken feedback. A 10 to 15 second silence after a simple command feels broken, even if the model eventually returns the correct JSON.
 
-The M2B design sent every turn through a text-only Gemma router before looking at the screen. The router decided whether the utterance was a local tool, a screen question, a general answer, or needed clarification. That was clean architecture, but it put Gemma on the critical path for commands that should be nearly instant, such as changing language or moving the assistant bubble.
+The M2B design sent every turn through a text-only Gemma router before looking at the screen. The router decided whether the utterance was a local tool, a screen question, a general answer, or needed clarification. That was clean architecture, but it put Gemma on the critical path for commands that should be nearly instant, like changing language or moving the assistant bubble.
 
-The user doesn't care that the internal routing is clean. If Luca waits 13 seconds before saying *"Certo, parlerò in italiano"*, the command feels unusable.
+Problem: the user doesn't care that the internal routing is clean. If Luca waits 13 seconds before saying *"Certo, parlerò in italiano"*, the command feels unusable.
 
 ## What I measured
 
-These numbers come from manual tests on the device and in Google's [AI Edge Gallery](https://github.com/google-ai-edge/gallery) app, which runs models like Gemma on device, while I iterated on the router and screen-reasoning prompts. Exact timings vary by device and backend, but the pattern was consistent: prompt size, output size and waiting for the complete JSON dominate perceived latency.
+These numbers come from manual tests, on the device and in Google's [AI Edge Gallery](https://github.com/google-ai-edge/gallery) app (it runs models like Gemma on device), while I was iterating on the router and screen-reasoning prompts. Exact timings vary by device and backend, but the pattern was consistent: prompt size, output size and waiting for the complete JSON dominate perceived latency.
 
 | Experiment | Scenario | Observed result | Conclusion |
 | --- | --- | --- | --- |
@@ -44,15 +54,11 @@ These numbers come from manual tests on the device and in Google's [AI Edge Gall
 
 ## What the numbers taught me
 
-Gemma shouldn't be the event loop. It's valuable for reasoning, resolving ambiguity, explaining the screen and judging safety, but it shouldn't be called for every small routing or settings decision.
-
-Prompt size matters more than I expected: roughly 54 s for the rich prompt against roughly 8 s for the ultra-compact one. That's why M3 uses compact screen maps instead of raw UI trees.
-
-So do output size and schema complexity. Luca can't safely act until the whole JSON object is generated and parsed, so even if the model starts producing tokens early, the app waits for the end. A smaller JSON finishes sooner.
-
-In Edge Gallery you watch the text stream in, which makes the model feel faster than it is. Luca can't run a tool or highlight a target until it has valid structured output, so full-output latency matters much more than time to first token.
-
-Finally, immediate feedback changes how long the wait feels. When a screen task really needs Gemma, Luca should say *"Sto controllando lo schermo…"* ("Checking the screen…") right away and keep working, instead of leaving the user in silence.
+1. Gemma shouldn't be the event loop. It's useful for reasoning, resolving ambiguity, explaining the screen and judging safety, but it shouldn't be called for every small routing or settings decision.
+2. Prompt size matters more than I expected: roughly 54 s for the rich prompt against roughly 8 s for the ultra-compact one. That's why M3 uses compact screen maps instead of raw UI trees.
+3. Output size and schema complexity matter too. Luca can't safely act until the whole JSON object is generated and parsed, so even if the model starts producing tokens early, the app waits for the end. A smaller JSON finishes sooner.
+4. Streaming can fool you. In Edge Gallery you watch the text stream in, which makes the model feel faster than it is. Luca can't run a tool or highlight a target until it has valid structured output, so full-output latency matters much more than time to first token.
+5. Immediate feedback changes how long the wait feels. When a screen task really needs Gemma, Luca should say *"Sto controllando lo schermo…"* ("Checking the screen…") right away and keep working, instead of leaving the user in silence.
 
 ## What I've changed so far
 
@@ -67,11 +73,11 @@ Finally, immediate feedback changes how long the wait feels. When a screen task 
 
 ## The M3 design: latency first
 
-M3 starts from structured perception, a compact screen map and minimal output by default. The raw accessibility tree and OCR data stay inside the app. Gemma gets a compact representation with stable IDs and returns a `target_id`, never coordinates.
+M3 starts from structured perception, a compact screen map (point 2 above) and minimal output by default (point 3). The raw accessibility tree and OCR data stay inside the app. Gemma gets a compact representation with stable IDs and returns a `target_id`, never coordinates.
 
 ![Before and after. In M2B every request went through a Gemma router (13 to 15 seconds) and then Gemma reasoned over a rich UI tree (up to 54 seconds) before any tool or answer. In the M3 design a screen question becomes a compact screen map with stable IDs, Gemma returns a minimal JSON in about 7.9 seconds, and a local registry maps the target ID to screen bounds, while the assistant immediately says it is checking the screen](/images/posts/gemma-latency-before-after.svg)
 
-Here's what Gemma sees when the user asks *"How do I save this post?"* on the Facebook feed.
+Little example: here's what Gemma sees when the user asks *"How do I save this post?"* on the Facebook feed.
 
 Visible text:
 
@@ -100,7 +106,7 @@ And it must return only this JSON:
 {"say":"short answer","target_id":"ID or null","confidence":0.0}
 ```
 
-The app keeps a `target_id -> source -> bounds` registry internally. If Gemma returns `target_id` = `E5` with high enough confidence, Luca maps E5 to its bounds locally and highlights the right element. In the common case, Gemma never has to generate coordinates.
+The app keeps a `target_id -> source -> bounds` registry internally. If Gemma returns `target_id` = `E5` with high enough confidence, Luca maps E5 to its bounds locally and highlights the right element. So in the common case Gemma never has to generate coordinates.
 
 ## Why not a local command matcher right away?
 
@@ -112,7 +118,7 @@ The two layers solve different problems. Compact screen maps make Gemma faster w
 
 ## The fast path: deferred, but probably needed
 
-The fast path shouldn't be broad fuzzy matching. It should use strict slot and gate rules and prefer false negatives over false positives; anything uncertain falls back to Gemma.
+The fast path shouldn't be broad fuzzy matching. It should use strict slot and gate rules and prefer false negatives over false positives, and anything uncertain falls back to Gemma.
 
 | Intent | Required gates | Positive examples | Negative examples |
 | --- | --- | --- | --- |
@@ -122,3 +128,5 @@ The fast path shouldn't be broad fuzzy matching. It should use strict slot and g
 | `screen_context` shortcut | explicit screen, message, button or safety anchor | "where do I press?", "is this message spam?" | "what should I do?" with no screen anchor |
 
 Gemma stays at the center of Luca. The work is in deciding when to call it: with the smallest prompt that's enough, for an answer that's as short as possible, and never for a command a strict rule can recognize on its own.
+
+Thanks for reading!
