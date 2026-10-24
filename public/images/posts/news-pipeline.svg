@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 312" width="760" height="312" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4a453b"/>
+    </marker>
+  </defs>
+  <rect width="760" height="312" fill="#f7f5f0"/>
+
+  <g font-size="14" text-anchor="middle">
+    <rect x="8" y="36" width="142" height="56" rx="8" fill="#fbfaf7" stroke="#e3ddd0"/>
+    <text x="79" y="60" font-weight="600" fill="#1c1a16">Blogs and sites</text>
+    <text x="79" y="79" font-size="12" fill="#6b6558">already RSS</text>
+
+    <rect x="8" y="128" width="142" height="56" rx="8" fill="#fbfaf7" stroke="#e3ddd0"/>
+    <text x="79" y="152" font-weight="600" fill="#1c1a16">Newsletters</text>
+    <text x="79" y="171" font-size="12" fill="#6b6558">dedicated Gmail</text>
+
+    <rect x="8" y="220" width="142" height="56" rx="8" fill="#fbfaf7" stroke="#e3ddd0"/>
+    <text x="79" y="244" font-weight="600" fill="#1c1a16">YouTube, podcasts</text>
+    <text x="79" y="263" font-size="12" fill="#6b6558">their feeds</text>
+
+    <rect x="176" y="128" width="140" height="56" rx="8" fill="#fbfaf7" stroke="#e3ddd0"/>
+    <text x="246" y="152" font-weight="600" fill="#1c1a16">mail2rss</text>
+    <text x="246" y="171" font-size="12" fill="#6b6558">read-only Gmail API</text>
+
+    <rect x="344" y="36" width="166" height="240" rx="8" fill="#fbfaf7" stroke="#e3ddd0"/>
+    <text x="427" y="66" font-weight="600" fill="#1c1a16">FreshRSS</text>
+    <text x="427" y="86" font-size="12" fill="#6b6558">on my VPS</text>
+    <line x1="344" y1="200" x2="510" y2="200" stroke="#e3ddd0"/>
+    <text x="427" y="130" font-size="12" fill="#1c1a16">AI, finance, …</text>
+    <text x="427" y="146" font-size="12" fill="#6b6558">text categories</text>
+    <text x="427" y="232" font-size="12" fill="#1c1a16">AI_media, …</text>
+    <text x="427" y="248" font-size="12" fill="#6b6558">media categories</text>
+
+    <rect x="540" y="56" width="212" height="80" rx="8" fill="#fbfaf7" stroke="#e3ddd0"/>
+    <text x="646" y="86" font-weight="600" fill="#1c1a16">Sunday digests</text>
+    <text x="646" y="106" font-size="12" fill="#6b6558">scheduled Claude tasks,</text>
+    <text x="646" y="121" font-size="12" fill="#6b6558">one digest per topic</text>
+
+    <rect x="540" y="196" width="212" height="80" rx="8" fill="#fbfaf7" stroke="#b3542c" stroke-dasharray="5 4"/>
+    <text x="646" y="222" font-weight="600" fill="#1c1a16">Media pipeline</text>
+    <text x="646" y="242" font-size="12" fill="#6b6558">transcript or Whisper,</text>
+    <text x="646" y="257" font-size="12" fill="#6b6558">Claude CLI with tools off</text>
+  </g>
+
+  <g stroke="#4a453b" stroke-width="1.5" fill="none">
+    <line x1="152" y1="64" x2="340" y2="64" marker-end="url(#arrow)"/>
+    <line x1="152" y1="156" x2="172" y2="156" marker-end="url(#arrow)"/>
+    <line x1="318" y1="156" x2="340" y2="156" marker-end="url(#arrow)"/>
+    <line x1="152" y1="248" x2="340" y2="248" marker-end="url(#arrow)"/>
+    <line x1="512" y1="96" x2="536" y2="96" marker-end="url(#arrow)"/>
+    <line x1="512" y1="216" x2="536" y2="216" marker-end="url(#arrow)"/>
+    <line x1="538" y1="262" x2="514" y2="262" marker-end="url(#arrow)" stroke-dasharray="4 3"/>
+  </g>
+
+  <g font-size="12" text-anchor="middle">
+    <text x="525" y="296" fill="#6b6558">marks items as read</text>
+    <text x="752" y="30" fill="#b3542c" text-anchor="end">dashed: being built</text>
+  </g>
+</svg>
