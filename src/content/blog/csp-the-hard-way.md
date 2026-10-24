@@ -8,7 +8,7 @@ draft: false
 
 When I joined Workera I had six years of frontend security behind me at EclecticIQ, and for at least two of them I had been the go-to person for Content Security Policy. So when CSP landed on our plate, it looked like my kind of job. We estimated a month: it took at least four (not full time, since it ran alongside other work, but four months all the same).
 
-This post is the story of those months, in the order things went wrong, plus what I'd do differently today.
+This post is the story of those months, from the first broken page to a policy we could enforce, plus what I'd do differently today.
 
 Table of contents
 
