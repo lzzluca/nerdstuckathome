@@ -1,14 +1,10 @@
 ---
-title: "A day with Ink: from a few tools, to a writer that proposes"
+title: "A day with Ink: from a few tools to a writer that proposes"
 date: 2026-10-20
-excerpt: "Building an agent as writing assistant: introducing Ink."
+excerpt: "Building an agent as a writing assistant: introducing Ink."
 tags: ["ai"]
 draft: false
 ---
-
-*2026-10-20. Notes from building the agent of a novel-planning app, with
-Claude Code as pair. Twenty commits, one grilling session, and a few things
-I had to be told twice.*
 
 The app is a planning board for a novel: scenes on a timeline, characters,
 a plot, notes, and an AI assistant called Ink in the right column. The rule
@@ -114,17 +110,6 @@ every time the prompt or the listing changes. When there are three of these,
 promptfoo; not before. The chat, incidentally, did better than pass: it
 noticed that accepting the two replacements would leave a causal hole two
 scenes later.
-
-## What I had to be told
-
-- "Ten messages of history for the writer?" Why ten. The writer gets the
-  same trimmed history the chat has. Arbitrary numbers are a smell.
-- "The instruction is a brief, not the work." The chat's first instinct was
-  to outline all eight scenes inside the instruction it sent to the writer.
-- Terms in English, in the product and in the code: outline, prose, split,
-  write, instruction. The Italian stays in the conversation.
-- The end-to-end test is still not done: two different two-line prompts,
-  and then my own story.
 
 ## What is next
 

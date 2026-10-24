@@ -1,7 +1,7 @@
 ---
 title: "A local LLM for my parents' phone: building an on-device assistant with Gemma 4"
 date: 2026-10-15
-excerpt: "What I learned building Luca for the Gemma 4 Good hackathon: an Android assistant for elderly users, running Gemma 4 E2B entirely on a mid-range phone."
+excerpt: "What I learned building a mobile agent for elderly users at the Gemma 4 Good hackathon: an Android assistant that runs Gemma 4 E2B entirely on a mid-range phone."
 tags: ["ai", "android"]
 draft: false
 ---
@@ -37,7 +37,7 @@ That constraint shaped the architecture. Running vision on every turn would have
 
 ## What worked, what didn't
 
-Latency was the weak spot. On the A55, turns that needed vision were too slow for a fluid conversation. For someone already unsure of what's happening on their screen, a long silence feels like the app is broken. I measured where the time went, and what I changed, in [Luca + Gemma 4: Latency Reduction Strategy](/posts/luca-gemma-latency).
+Latency was the weak spot. On the A55, turns that needed vision were too slow for a fluid conversation. For someone already unsure of what's happening on their screen, a long silence feels like the app is broken. I measured where the time went, and what I changed, in [On-device Gemma 4: cutting latency from 54 seconds to under 8](/posts/luca-gemma-latency).
 
 The model itself surprised me. For a model this size, Gemma 4 did more than I expected:
 

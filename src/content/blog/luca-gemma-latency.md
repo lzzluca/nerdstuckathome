@@ -1,7 +1,7 @@
 ---
-title: "Luca + Gemma 4: Latency Reduction Strategy"
+title: "On-device Gemma 4: cutting latency from 54 seconds to under 8"
 date: 2026-05-28
-excerpt: "Measurements, design decisions, and why Luca's architecture changed: from a 54-second prompt to under 8 seconds, by keeping Gemma out of the event loop."
+excerpt: "Measurements, design decisions, and why the assistant's architecture changed: from a 54-second prompt to under 8 seconds, by keeping Gemma out of the event loop."
 tags: ["ai", "android"]
 draft: false
 ---
