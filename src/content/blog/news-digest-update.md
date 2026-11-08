@@ -14,7 +14,6 @@ The short version: it all runs now, on the VPS, with nothing to do by hand.
 
 - Every night, `media.py` takes the new videos and podcast episodes of the `_media` categories and turns each one into a short summary. The summaries go into a feed that FreshRSS reads like any other.
 - Every Sunday at 05:00, `digest.py` summarizes the last seven days of each text category with Claude: blogs, newsletters, and those media summaries too.
-- Every five minutes, a cron line checks GitHub for new commits and redeploys the container. It's temporary, and I'll explain why below.
 
 In the first post I said that scheduled Claude tasks write the digests. That was only a bridge while the pipeline was being built, and in the end it couldn't even work: FreshRSS's `robots.txt` blocks them. Now `digest.py` reads FreshRSS from inside the Docker network, so nothing has to be public.
 
@@ -43,17 +42,21 @@ Two more things worth knowing:
 
 This is the part I didn't expect. Once the pipeline worked, I realized that summarizing well doesn't help much if the sources are wrong. My feeds came from years of habit, there was a lot of noise, and the same news arrived from five places.
 
-So I tried to make Claude find the best sources for me: every Sunday, unattended, search the week's best content on my topics, see who wrote it and where it was shared, and keep a log for eight weeks. I spent a whole morning designing it to be honest with itself (that could be a post on its own!). Then it hit a wall: a run with nobody watching can't open web pages, because every new site asks me for an approval, and I'm not at the screen on Sunday morning. With search results alone it found almost nothing.
+The idea was to let Claude find the best sources for me, with data instead of gut feeling. Some definitions first: a source is who wrote the original content (a blog, an author, a company's engineering blog), a channel is where it was shared (Hacker News, a subreddit, a newsletter made of links). Every Sunday, unattended, a Claude task would search the week's content on my topics and show me its top 15 picks, together with the other pieces it had found. I would review them and tell it which ones were really worth it and which weren't, and week after week it would learn from my feedback. In the meantime it would log who wrote each piece and where it was shared, and after eight weeks tell me which sources and channels are worth following.
 
-What I did instead is much simpler: a minimal base of sources picked by hand, each one checked to be still active and scored by how much an AI engineer can't afford to miss it. For AI that's twelve feeds. Anthropic has no RSS feed at all, so I added its news and engineering pages with FreshRSS's "HTML + XPath" feeds, which scrape the page (it will break the day they change the layout, but for now it works).
+Before trusting it for eight weeks, I validated it with a first real run, and it turned out to be more complicated than expected. Problem: a run with nobody watching can't open new web pages. Every new site asks me for an approval, even with the task set to approve its own actions automatically, and on a Sunday morning I'm not at the screen. To get around it, I switched the task to web search only, which needs no approval. Follow-up problem: web search gives back a list of results, not the articles. In those runs the list had titles and links but no text and no dates, so the task couldn't judge a piece, or even tell whether it was from that week. Three pieces survived, for a whole week. That's enough for a weekly summary, which only needs to know what's out there, but not for measuring where good content comes from.
 
-I'm not 100% happy about giving up on the measurement, but chasing the perfect source list was taking more time than reading.
+That's where I looked at it again. Even if the permissions had worked, every week the task would have read the same dozen aggregators: Hacker News, a few subreddits, TLDR, AINews. If the places to look are fixed anyway, they can simply be feeds in FreshRSS, which reads them without asking anyone.
+
+In the end I went one step simpler: a minimal base of primary sources, picked by hand, each one checked to be still active and scored by how much an AI engineer can't afford to miss it. The aggregators can come later, if the base turns out to miss things (I'm also not sure all of them can be read from FreshRSS, Reddit for example). For AI that's twelve feeds. Anthropic has no RSS feed at all, so I added its news and engineering pages with FreshRSS's "HTML + XPath" feeds, which scrape the page (it will break the day they change the layout, but for now it works).
+
+I'm not 100% happy about giving up on the measurement. The lesson for next time: test the riskiest assumption first. Here it was "can this run with nobody watching?", and a ten-minute unattended run would have answered it before any design work.
 
 ## What's next
 
 - Check Gemini's log in two weeks, then remove the old YouTube path.
 - The same base of sources for web and frontend.
-- Then stop touching the pipeline: revoke Claude's push access to the repo and remove the auto-deploy cron, which exists only so Claude can push changes while I'm away from the server.
+- Then stop touching the pipeline, and revoke Claude's push access to the repo.
 
 For me the takeaway is that building the pipeline was the fun part, but choosing the sources mattered more. Now the plan is to spend Sunday mornings reading the digests.
 
