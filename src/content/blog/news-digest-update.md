@@ -3,7 +3,6 @@ title: "My news digest pipeline, one month later"
 date: 2026-11-08
 excerpt: "The media pipeline runs, podcasts included. YouTube refused every subtitle request, so Whisper did the work for weeks, until Gemini took over. And the hardest part turned out to be choosing the sources, not summarizing them."
 tags: ["self-hosting", "ai", "automation"]
-draft: true
 ---
 
 A month ago I wrote about [the design of my news digest pipeline](/posts/self-hosted-rss-pipeline): everything lands in FreshRSS on my VPS, videos and podcasts become text, and on Sunday morning I get one summary per topic. Back then part of it was still a plan. This is what it turned into, including the parts that didn't go as planned.
