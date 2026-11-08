@@ -3,7 +3,7 @@ title: "Finding the right sources, before summarizing them"
 date: 2026-11-08
 excerpt: "My weekly digest summarized whatever I happened to follow. Now two scheduled tasks look for the best content of the week and keep a log of who wrote it and where it showed up, so in eight weeks I can decide what to follow with real data."
 tags: ["ai", "automation", "learning"]
-draft: false
+draft: true
 ---
 
 A month ago I wrote about [the self-hosted pipeline for my weekly news digest](/posts/self-hosted-rss-pipeline): everything flows into FreshRSS on my VPS, and on Sunday morning Claude summarizes it. It works. But after a few Sundays I realized that the question I really cared about came before the summary: are the sources in my FreshRSS actually the most relevant ones?
