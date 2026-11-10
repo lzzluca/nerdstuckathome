@@ -24,7 +24,7 @@ First attempt that worked: download the audio (the cookies are enough for that) 
 
 The one that stuck: Gemini. Its API accepts a YouTube URL directly, and Google reads the video from its own servers. That means: no 429, and no need for cookies, downloads or Whisper on my VPS. The first real video was summarized in a few seconds instead of 25 minutes, and the summary was good: concrete, with names, dates and the main argument. The free tier allows up to 8 hours of YouTube per day, which is plenty for me. I used an AI Studio project without billing on purpose: if I hit the limit, the API just says no, and there's nothing to charge.
 
-When Gemini fails (quota, a model that gets retired, anything), the old path with cookies and Whisper still runs. If in two weeks the log shows no failures, I'll delete it: less code, and one secret fewer on the server.
+I first kept the old path with cookies and Whisper as a fallback, for when Gemini fails (quota, a model that gets retired, anything). Then, the same day, I deleted it: less code to maintain and a simpler pipeline (with one secret fewer on the server, too). If Gemini fails on a video, the video stays unread and gets retried the next night.
 
 ## Podcasts
 
@@ -43,19 +43,16 @@ This is the part I didn't expect. Once the pipeline worked, I realized that summ
 
 The idea was to let Claude find the best sources for me, with data instead of gut feeling. Some definitions first: a source is who wrote the original content (a blog, an author, a company's engineering blog), a channel is where it was shared (Hacker News, a subreddit, a newsletter made of links). Every Sunday, unattended, a Claude task would search the week's content on my topics and show me its top 15 picks, together with the other pieces it had found. I would review them and tell it which ones were really worth it and which weren't, and week after week it would learn from my feedback. In the meantime it would log who wrote each piece and where it was shared, and after eight weeks tell me which sources and channels are worth following.
 
-Before trusting it for eight weeks, I validated it with a first real run, and it turned out to be more complicated than expected. Problem: a run with nobody watching can't open new web pages. Every new site asks me for an approval, even with the task set to approve its own actions automatically, and on a Sunday morning I'm not at the screen. To get around it, I switched the task to web search only, which needs no approval. Follow-up problem: web search gives back a list of results, not the articles. In those runs the list had titles and links but no text and no dates, so the task couldn't judge a piece, or even tell whether it was from that week. Three pieces survived, for a whole week. That's enough for a weekly summary, which only needs to know what's out there, but not for measuring where good content comes from.
-
-That's where I looked at it again. Even if the permissions had worked, every week the task would have read the same dozen aggregators: Hacker News, a few subreddits, TLDR, AINews. If the places to look are fixed anyway, they can simply be feeds in FreshRSS, which reads them without asking anyone.
+Then I looked at it again. Every week the task would have read the same dozen aggregators: Hacker News, a few subreddits, TLDR, AINews. If the places to look are fixed anyway, they can simply be feeds in FreshRSS, which reads them without asking anyone.
 
 In the end I went one step simpler: a minimal base of primary sources, picked by hand, each one checked to be still active and scored by how much an AI engineer can't afford to miss it. The aggregators can come later, if the base turns out to miss things (I'm also not sure all of them can be read from FreshRSS, Reddit for example). For AI that's twelve feeds. Anthropic has no RSS feed at all, so I added its news and engineering pages with FreshRSS's "HTML + XPath" feeds, which scrape the page (it will break the day they change the layout, but for now it works).
 
-I'm not 100% happy about giving up on the measurement. The lesson for next time: test the riskiest assumption first. Here it was "can this run with nobody watching?", and a ten-minute unattended run would have answered it before any design work.
+I'm not 100% happy about giving up on the measurement, but a fixed list read by a feed reader is much simpler than an agent reading it for me.
 
 ## What's next
 
-- Check Gemini's log in two weeks, then remove the old YouTube path.
 - The same base of sources for web and frontend.
-- Then stop touching the pipeline, and revoke Claude's push access to the repo.
+- Then stop touching the pipeline.
 
 For me the takeaway is that building the pipeline was the fun part, but choosing the sources mattered more. Now the plan is to spend Sunday mornings reading the digests.
 
